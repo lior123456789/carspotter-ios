@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Required Info.plist keys for CarSpotter. Add these to the auto-generated
+  Info.plist inside your Xcode project (or paste them directly).
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>CarSpotter</string>
+
+    <!-- ── Permissions ── -->
+    <key>NSCameraUsageDescription</key>
+    <string>CarSpotter uses the camera to identify cars instantly.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Pick a photo from your library to identify the car.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Show car-spotting hotspots near you on the map.</string>
+
+    <!-- ── App Transport Security (allow localhost in DEBUG only) ── -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+
+    <!-- ── Sign in with Apple ── -->
+    <key>com.apple.developer.applesignin</key>
+    <array>
+        <string>Default</string>
+    </array>
+</dict>
+</plist>
