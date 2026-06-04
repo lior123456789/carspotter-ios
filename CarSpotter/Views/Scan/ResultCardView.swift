@@ -3,6 +3,7 @@ import SwiftUI
 struct ResultCardView: View {
     let car: CarInfo
     let onScanAnother: () -> Void
+    @State private var showShare = false
 
     var body: some View {
         ScrollView {
@@ -140,8 +141,15 @@ struct ResultCardView: View {
 
                     // ── Actions ──
                     VStack(spacing: 10) {
-                        GradientButton(title: "Save to garage", icon: "tray.and.arrow.down.fill") {}
-                        GradientButton(title: "Scan another", icon: "camera.viewfinder", style: .ghost) {
+                        GradientButton(title: "Share to feed", icon: "paperplane.fill") {
+                            showShare = true
+                        }
+                        GradientButton(title: "Save to garage",
+                                       icon: "tray.and.arrow.down.fill",
+                                       style: .ghost) {}
+                        GradientButton(title: "Scan another",
+                                       icon: "camera.viewfinder",
+                                       style: .ghost) {
                             onScanAnother()
                         }
                     }
@@ -151,6 +159,9 @@ struct ResultCardView: View {
             }
         }
         .background(Color.spotterInk.ignoresSafeArea())
+        .sheet(isPresented: $showShare) {
+            ComposePostView(car: car)
+        }
     }
 }
 

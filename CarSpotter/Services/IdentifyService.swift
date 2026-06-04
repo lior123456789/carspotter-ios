@@ -18,23 +18,26 @@ final class IdentifyService: ObservableObject {
     @Published var error: String?
     @Published var isRunning: Bool = false
 
-    /// High-quality client-side optimizer — caps the longest side at 2048px
-    /// and re-encodes at 92% JPEG to fit Claude's 5MB image limit while
-    /// staying visually lossless.
+    /// High-quality client-side optimizer — caps the longest side at 3072px
+    /// and re-encodes at 95% JPEG. Empirically the sweet spot for Claude
+    /// vision: enough detail for badge/grille/wheel ID, still under 5MB.
     func optimize(_ image: UIImage) -> Data? {
-        let maxDim: CGFloat = 2048
-        let scale = max(image.size.width, image.size.height) > maxDim
-            ? maxDim / max(image.size.width, image.size.height)
+        // Apply EXIF orientation FIRST — Claude's vision doesn't auto-rotate,
+        // so a sideways phone photo becomes a sideways model input.
+        let oriented = image.fixedOrientation()
+        let maxDim: CGFloat = 3072
+        let scale = max(oriented.size.width, oriented.size.height) > maxDim
+            ? maxDim / max(oriented.size.width, oriented.size.height)
             : 1
         let newSize = CGSize(
-            width: image.size.width * scale,
-            height: image.size.height * scale
+            width: oriented.size.width * scale,
+            height: oriented.size.height * scale
         )
         let renderer = UIGraphicsImageRenderer(size: newSize)
         let resized = renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: newSize))
+            oriented.draw(in: CGRect(origin: .zero, size: newSize))
         }
-        return resized.jpegData(compressionQuality: 0.92)
+        return resized.jpegData(compressionQuality: 0.95)
     }
 
     /// Run the identification flow — animates the staged loader while the

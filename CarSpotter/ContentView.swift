@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var tab: Tab = .scan
+    @State private var tab: Tab = .feed
 
-    enum Tab: Hashable { case scan, garage, map, profile }
+    enum Tab: Hashable { case feed, scan, garage, map, profile }
 
     var body: some View {
         TabView(selection: $tab) {
+            FeedView()
+                .tabItem { Label("Feed", systemImage: "newspaper.fill") }
+                .tag(Tab.feed)
+
             ScanView()
                 .tabItem { Label("Scan", systemImage: "camera.viewfinder") }
                 .tag(Tab.scan)
