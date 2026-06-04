@@ -83,7 +83,7 @@ struct ScanView: View {
             Text("Make, model, year, MSRP, today's value,\nrarity, celebrity owners, fun facts — in 2s.")
                 .multilineTextAlignment(.center)
                 .font(.system(size: 15, design: .rounded))
-                .foregroundStyle(.spotterMute)
+                .foregroundStyle(Color.spotterMute)
                 .padding(.horizontal, 30)
 
             Spacer()
@@ -128,7 +128,7 @@ struct ScanProgressView: View {
             Text("IDENTIFYING")
                 .font(.spotterLabel)
                 .tracking(3)
-                .foregroundStyle(.spotterMute)
+                .foregroundStyle(Color.spotterMute)
 
             Text(stage.rawValue)
                 .font(.system(size: 18, weight: .medium, design: .rounded))

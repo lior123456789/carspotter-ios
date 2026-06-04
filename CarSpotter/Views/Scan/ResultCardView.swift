@@ -40,7 +40,7 @@ struct ResultCardView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(car.make)
                             .font(.system(size: 22, weight: .medium, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                         Text(car.model)
                             .font(.system(size: 36, weight: .bold, design: .rounded))
                             .foregroundStyle(LinearGradient.spotterBrand)
@@ -98,7 +98,7 @@ struct ResultCardView: View {
                                 Spacer()
                                 Text(sale.auction + " · " + sale.date)
                                     .font(.system(size: 13, design: .rounded))
-                                    .foregroundStyle(.spotterMute)
+                                    .foregroundStyle(Color.spotterMute)
                             }
                         }
                         .padding(14)
@@ -111,10 +111,10 @@ struct ResultCardView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 6) {
                             Image(systemName: "sparkles")
-                                .foregroundStyle(.spotterCyan)
+                                .foregroundStyle(Color.spotterCyan)
                             Text("DID YOU KNOW")
                                 .font(.spotterLabel)
-                                .foregroundStyle(.spotterCyan)
+                                .foregroundStyle(Color.spotterCyan)
                         }
                         Text(car.funFact)
                             .font(.system(size: 15, design: .rounded))
@@ -133,7 +133,7 @@ struct ResultCardView: View {
                                 .font(.spotterLabel)
                             Text(wiki)
                                 .font(.system(size: 14, design: .rounded))
-                                .foregroundStyle(.spotterMute)
+                                .foregroundStyle(Color.spotterMute)
                                 .lineSpacing(3)
                         }
                         .padding(.top, 6)

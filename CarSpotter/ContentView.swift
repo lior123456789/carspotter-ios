@@ -27,7 +27,7 @@ struct ContentView: View {
                 .tabItem { Label("Profile", systemImage: "person.crop.circle") }
                 .tag(Tab.profile)
         }
-        .tint(.spotterCyan)
+        .tint(Color.spotterCyan)
     }
 }
 

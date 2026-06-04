@@ -16,7 +16,7 @@ struct CarSpotterApp: App {
                 .environmentObject(auth)
                 .environmentObject(store)
                 .preferredColorScheme(.dark)
-                .tint(.spotterCyan)
+                .tint(Color.spotterCyan)
         }
     }
 }
@@ -29,7 +29,7 @@ private struct RootView: View {
             if auth.isLoading {
                 ZStack {
                     Color.spotterInk.ignoresSafeArea()
-                    ProgressView().tint(.spotterCyan)
+                    ProgressView().tint(Color.spotterCyan)
                 }
             } else if auth.user == nil {
                 SignInView()

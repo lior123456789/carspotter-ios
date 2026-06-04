@@ -11,7 +11,7 @@ struct StatRow: View {
             Text(label.uppercased())
                 .font(.system(size: 10, weight: .heavy, design: .rounded))
                 .tracking(2)
-                .foregroundStyle(.spotterMute)
+                .foregroundStyle(Color.spotterMute)
 
             Text(value)
                 .font(.system(size: 16, weight: .semibold, design: .rounded))

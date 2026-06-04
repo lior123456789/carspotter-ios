@@ -29,7 +29,7 @@ struct SpotMapView: View {
                 .ignoresSafeArea(edges: [.bottom])
 
                 if loader.spots.isEmpty {
-                    ProgressView().tint(.spotterCyan)
+                    ProgressView().tint(Color.spotterCyan)
                 }
             }
             .navigationTitle("Spot Map")

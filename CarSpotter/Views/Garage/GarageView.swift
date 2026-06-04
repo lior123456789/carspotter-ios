@@ -11,7 +11,7 @@ struct GarageView: View {
                 Color.spotterInk.ignoresSafeArea()
 
                 if firestore.isLoadingScans {
-                    ProgressView().tint(.spotterCyan)
+                    ProgressView().tint(Color.spotterCyan)
                 } else if firestore.myScans.isEmpty {
                     emptyState
                 } else {
@@ -36,7 +36,7 @@ struct GarageView: View {
             Text("Snap your first car on the Scan tab —\nit'll land here automatically.")
                 .multilineTextAlignment(.center)
                 .font(.system(size: 14, design: .rounded))
-                .foregroundStyle(.spotterMute)
+                .foregroundStyle(Color.spotterMute)
                 .padding(.horizontal, 40)
             Spacer()
         }
@@ -118,7 +118,7 @@ private struct GarageCarRow: View {
                     .lineLimit(1)
                 Text(car.valueRange)
                     .font(.system(size: 13, design: .rounded))
-                    .foregroundStyle(.spotterMute)
+                    .foregroundStyle(Color.spotterMute)
             }
 
             Spacer()
@@ -129,7 +129,7 @@ private struct GarageCarRow: View {
                     .foregroundStyle(.yellow)
                 Text("\(car.rarity)/10")
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.spotterCyan)
+                    .foregroundStyle(Color.spotterCyan)
             }
         }
         .padding(12)

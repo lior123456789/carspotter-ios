@@ -10,7 +10,7 @@ struct FeedView: View {
                 Color.spotterInk.ignoresSafeArea()
 
                 if feed.isLoading && feed.posts.isEmpty {
-                    ProgressView().tint(.spotterCyan)
+                    ProgressView().tint(Color.spotterCyan)
                 } else if feed.posts.isEmpty {
                     emptyState
                 } else {
@@ -59,7 +59,7 @@ struct FeedView: View {
             Text("Be the first to share a spot today —\ntag #DailyChallenge for bonus points.")
                 .multilineTextAlignment(.center)
                 .font(.system(size: 14, design: .rounded))
-                .foregroundStyle(.spotterMute)
+                .foregroundStyle(Color.spotterMute)
                 .padding(.horizontal, 40)
             Spacer()
         }

@@ -101,7 +101,7 @@ struct ComposePostView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }.foregroundStyle(.spotterMute)
+                    Button("Cancel") { dismiss() }.foregroundStyle(Color.spotterMute)
                 }
             }
         }

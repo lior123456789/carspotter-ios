@@ -35,7 +35,7 @@ struct PaywallView: View {
                             .foregroundStyle(.white)
                         Text("Pick the plan that fits — cancel anytime.")
                             .font(.system(size: 14, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                     }
 
                     // Monthly / Yearly toggle
@@ -49,7 +49,7 @@ struct PaywallView: View {
                                     .padding(.horizontal, 18)
                                     .padding(.vertical, 8)
                                     .background(billing == b ? AnyShapeStyle(LinearGradient.spotterBrand) : AnyShapeStyle(Color.clear))
-                                    .foregroundStyle(billing == b ? .white : .spotterMute)
+                                    .foregroundStyle(billing == b ? Color.white : Color.spotterMute)
                                     .clipShape(Capsule())
                             }
                         }
@@ -88,7 +88,7 @@ struct PaywallView: View {
                         Button("Privacy") { open("https://carsspotter.com/privacy") }
                     }
                     .font(.system(size: 12, design: .rounded))
-                    .foregroundStyle(.spotterMute)
+                    .foregroundStyle(Color.spotterMute)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 30)
@@ -102,7 +102,7 @@ struct PaywallView: View {
             HStack(alignment: .top, spacing: 14) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 22))
-                    .foregroundStyle(isSelected ? Color.spotterCyan : .spotterMute)
+                    .foregroundStyle(isSelected ? Color.spotterCyan : Color.spotterMute)
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
@@ -119,7 +119,7 @@ struct PaywallView: View {
                     }
                     Text(tierBlurb(tier))
                         .font(.system(size: 13, design: .rounded))
-                        .foregroundStyle(.spotterMute)
+                        .foregroundStyle(Color.spotterMute)
                         .multilineTextAlignment(.leading)
                 }
             }

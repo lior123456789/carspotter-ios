@@ -22,7 +22,7 @@ struct ProfileView: View {
                                     .foregroundStyle(.white)
                                 Text(auth.user?.isAnonymous == true ? "Guest mode · syncs after sign-in" : "Signed in")
                                     .font(.system(size: 13, design: .rounded))
-                                    .foregroundStyle(.spotterMute)
+                                    .foregroundStyle(Color.spotterMute)
                             }
                         }
                         .padding(24)
@@ -44,7 +44,7 @@ struct ProfileView: View {
                                          ? "3 free scans"
                                          : "Unlimited scans · all features")
                                         .font(.system(size: 13, design: .rounded))
-                                        .foregroundStyle(.spotterMute)
+                                        .foregroundStyle(Color.spotterMute)
                                 }
                                 Spacer()
                                 Image(systemName: store.purchasedTier == .free ? "lock.fill" : "checkmark.seal.fill")
@@ -113,7 +113,7 @@ struct ProfileView: View {
 
                         Text("CarSpotter v1.0.0")
                             .font(.system(size: 11, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                             .padding(.top, 4)
                     }
                     .padding(20)
@@ -135,7 +135,7 @@ struct ProfileView: View {
         Button(action: action) {
             HStack(spacing: 14) {
                 Image(systemName: icon)
-                    .foregroundStyle(.spotterCyan)
+                    .foregroundStyle(Color.spotterCyan)
                     .frame(width: 24)
                 Text(title)
                     .font(.system(size: 15, design: .rounded))
@@ -143,7 +143,7 @@ struct ProfileView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.spotterMute)
+                    .foregroundStyle(Color.spotterMute)
             }
             .padding(.horizontal, 18)
             .padding(.vertical, 14)

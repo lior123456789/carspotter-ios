@@ -45,7 +45,7 @@ struct SignInView: View {
                              ? "Pick up where you left off — your garage syncs across devices."
                              : "Free forever for 3 scans. No card needed.")
                             .font(.system(size: 15, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -73,7 +73,7 @@ struct SignInView: View {
                         Rectangle().fill(Color.spotterLine).frame(height: 1)
                         Text("or with email")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                             .padding(.horizontal, 10)
                         Rectangle().fill(Color.spotterLine).frame(height: 1)
                     }
@@ -127,7 +127,7 @@ struct SignInView: View {
                              ? "Don't have an account? **Sign up**"
                              : "Already have one? **Sign in**")
                             .font(.system(size: 14, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                     }
                 }
                 .padding(.horizontal, 24)

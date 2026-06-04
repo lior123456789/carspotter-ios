@@ -20,14 +20,14 @@ struct PostCardView: View {
                     HStack(spacing: 4) {
                         Text(post.timeAgo)
                             .font(.system(size: 11, design: .rounded))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                         if let loc = post.location {
-                            Text("·").foregroundStyle(.spotterMute)
+                            Text("·").foregroundStyle(Color.spotterMute)
                             Image(systemName: "mappin.circle.fill").font(.system(size: 9))
                             Text(loc).font(.system(size: 11, design: .rounded))
                         }
                     }
-                    .foregroundStyle(.spotterMute)
+                    .foregroundStyle(Color.spotterMute)
                 }
                 Spacer()
                 if let onDelete {
@@ -38,7 +38,7 @@ struct PostCardView: View {
                     } label: {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 14, weight: .bold))
-                            .foregroundStyle(.spotterMute)
+                            .foregroundStyle(Color.spotterMute)
                             .padding(8)
                     }
                 }
@@ -51,12 +51,12 @@ struct PostCardView: View {
                     switch phase {
                     case .empty:
                         Rectangle().fill(Color.spotterPanel)
-                            .overlay(ProgressView().tint(.spotterCyan))
+                            .overlay(ProgressView().tint(Color.spotterCyan))
                     case .success(let img):
                         img.resizable().scaledToFill()
                     case .failure:
                         Rectangle().fill(Color.spotterPanel)
-                            .overlay(Image(systemName: "photo.fill").foregroundStyle(.spotterMute))
+                            .overlay(Image(systemName: "photo.fill").foregroundStyle(Color.spotterMute))
                     @unknown default:
                         Rectangle().fill(Color.spotterPanel)
                     }
