@@ -61,8 +61,6 @@ targets:
       - package: Firebase
         product: FirebaseFirestore
       - package: Firebase
-        product: FirebaseAnalytics
-      - package: Firebase
         product: FirebaseStorage
     entitlements:
       path: CarSpotter/CarSpotter.entitlements
