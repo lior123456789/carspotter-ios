@@ -61,8 +61,6 @@ targets:
       - package: Firebase
         product: FirebaseFirestore
       - package: Firebase
-        product: FirebaseFirestoreSwift
-      - package: Firebase
         product: FirebaseAnalytics
       - package: Firebase
         product: FirebaseStorage
