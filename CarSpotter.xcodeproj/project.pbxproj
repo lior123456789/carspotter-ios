@@ -14,6 +14,7 @@
 		119A51A3E2B51C5AC8DBC57F /* ComposePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961F760E02987542F4F7E79F /* ComposePostView.swift */; };
 		18302A58A0C963AB67370FA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA259D2B112F966B580E491 /* GoogleService-Info.plist */; };
 		2AB93C81E27DCB5E00B51589 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCA61903C51B9DF3F4B657 /* FirestoreService.swift */; };
+		E1A2B3C4D5E6F7A8B9C0D1E2 /* Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6978687554433 /* Entitlements.swift */; };
 		2B829C517EEB4694B78B08E8 /* GarageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72B3315D4B5015414EDFBB7 /* GarageView.swift */; };
 		2EC366CF02537B0D447E5B32 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34AF78F2F3AD63E6FC22A60 /* SignInView.swift */; };
 		394F93AEA98A719224D01C83 /* BrandLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C01CAC3851303BC751CD9EE /* BrandLogo.swift */; };
@@ -47,7 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EF40BCCD4ADBEDEBA2D121 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1EFEB3C9FD8806C948B36E4D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3985D7FEE9D7F21C5D4555EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -68,6 +69,7 @@
 		8518E8A25AD7344F08D60CD8 /* FeedPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPost.swift; sourceTree = "<group>"; };
 		8A9F1801F1FE7197DE7BF49B /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8EFCA61903C51B9DF3F4B657 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A6978687554433 /* Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlements.swift; sourceTree = "<group>"; };
 		961F760E02987542F4F7E79F /* ComposePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposePostView.swift; sourceTree = "<group>"; };
 		9C01CAC3851303BC751CD9EE /* BrandLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandLogo.swift; sourceTree = "<group>"; };
 		A018A2A3737DC7AA01FCA153 /* CarSpotter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarSpotter.entitlements; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				A4B9852786A6EE0F56EE7C6D /* API.swift */,
 				4E16AC07E1BF96AE1EA4B41B /* AuthService.swift */,
+				F1E2D3C4B5A6978687554433 /* Entitlements.swift */,
 				6A5F98713970AA4769C4F994 /* FeedService.swift */,
 				BF43DC095B6EA819C654BCB4 /* FirebaseREST.swift */,
 				8EFCA61903C51B9DF3F4B657 /* FirestoreService.swift */,
@@ -288,11 +291,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					30D24BFE94F1C08EAA72209A = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = B694DD0642AFFBC6ADE28644 /* Build configuration list for PBXProject "CarSpotter" */;
 			developmentRegion = en;
@@ -347,6 +345,7 @@
 				ACB359F07EEA7D5E38BDE2A4 /* FeedView.swift in Sources */,
 				D299A57F043372C427E0950C /* FirebaseREST.swift in Sources */,
 				2AB93C81E27DCB5E00B51589 /* FirestoreService.swift in Sources */,
+				E1A2B3C4D5E6F7A8B9C0D1E2 /* Entitlements.swift in Sources */,
 				2B829C517EEB4694B78B08E8 /* GarageView.swift in Sources */,
 				C1AE2BF3828E71FDC5314DF7 /* GradientButton.swift in Sources */,
 				BC70CAE5285898B97847C2A9 /* IdentifyService.swift in Sources */,
@@ -438,6 +437,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -448,7 +448,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.carsspotter;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -526,6 +526,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -536,7 +537,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.carsspotter;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
