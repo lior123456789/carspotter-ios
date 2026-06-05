@@ -2,7 +2,7 @@ import Foundation
 import CoreLocation
 
 /// Mirror of `Spot` from the web project's `lib/spotData.ts`.
-struct Spot: Codable, Identifiable, Equatable {
+struct Spot: Codable, Identifiable, Equatable, Hashable {
     let id: String
     let name: String
     let city: String
@@ -16,7 +16,7 @@ struct Spot: Codable, Identifiable, Equatable {
     let bestTime: String?
     let tier: Tier
 
-    enum Kind: String, Codable, CaseIterable, Identifiable {
+    enum Kind: String, Codable, CaseIterable, Identifiable, Hashable {
         case concours = "Concours"
         case boulevard = "Boulevard"
         case auction = "Auction"
@@ -41,7 +41,7 @@ struct Spot: Codable, Identifiable, Equatable {
         }
     }
 
-    enum Tier: String, Codable {
+    enum Tier: String, Codable, Hashable {
         case iconic, premium, regular
     }
 
