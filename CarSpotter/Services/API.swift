@@ -1,11 +1,10 @@
 import Foundation
 
 enum API {
-    #if DEBUG
-    static let baseURL = URL(string: "http://localhost:3004")!
-    #else
-    static let baseURL = URL(string: "https://carsspotter.app")!
-    #endif
+    /// Always use the live production API on `carsspotter.com`.
+    /// (Was using `carsspotter.app` and `localhost` in DEBUG — both
+    /// caused "Could not connect to the server" on a real iPhone.)
+    static let baseURL = URL(string: "https://carsspotter.com")!
 
     enum Endpoint: String {
         case carInfo = "/api/car-info"
