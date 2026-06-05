@@ -1,5 +1,4 @@
 import Foundation
-import FirebaseFirestore
 
 /// A single car-spot shared to the global feed.
 struct FeedPost: Identifiable, Equatable {
@@ -8,7 +7,7 @@ struct FeedPost: Identifiable, Equatable {
     let displayName: String
     let avatarUrl: String?
 
-    let photoUrl: String           // Firebase Storage download URL
+    let photoUrl: String
     let make: String
     let model: String
     let year: String
@@ -21,39 +20,8 @@ struct FeedPost: Identifiable, Equatable {
     let createdAt: Date
     var likeCount: Int
     var likedByMe: Bool
-
-    static func from(doc: QueryDocumentSnapshot, currentUserId: String) -> FeedPost? {
-        let d = doc.data()
-        guard
-            let userId = d["userId"] as? String,
-            let displayName = d["displayName"] as? String,
-            let photoUrl = d["photoUrl"] as? String,
-            let make = d["make"] as? String,
-            let model = d["model"] as? String,
-            let createdTs = d["createdAt"] as? Timestamp
-        else { return nil }
-
-        let likedBy = (d["likedBy"] as? [String]) ?? []
-
-        return FeedPost(
-            id: doc.documentID,
-            userId: userId,
-            displayName: displayName,
-            avatarUrl: d["avatarUrl"] as? String,
-            photoUrl: photoUrl,
-            make: make,
-            model: model,
-            year: d["year"] as? String ?? "",
-            category: d["category"] as? String ?? "Daily",
-            rarity: d["rarity"] as? Int ?? 5,
-            valueRange: d["valueRange"] as? String ?? "—",
-            caption: d["caption"] as? String ?? "",
-            location: d["location"] as? String,
-            createdAt: createdTs.dateValue(),
-            likeCount: likedBy.count,
-            likedByMe: likedBy.contains(currentUserId)
-        )
-    }
+    /// Full list of UIDs that liked this post (used for optimistic toggle math).
+    var likedBy: [String] = []
 
     /// "2m ago" / "3h ago" / "Yesterday" / formatted date
     var timeAgo: String {

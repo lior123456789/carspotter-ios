@@ -92,13 +92,16 @@ enum FirestoreREST {
         }
     }
 
-    private static func authedRequest(_ url: URL, method: String) async throws -> URLRequest {
-        guard let token = try? await Auth.auth().currentUser?.getIDToken() else {
+    private static func authedRequest(_ url: URL, method: String, requireAuth: Bool = true) async throws -> URLRequest {
+        let token = try? await Auth.auth().currentUser?.getIDToken()
+        if requireAuth && token == nil {
             throw FirebaseRESTError.notSignedIn
         }
         var req = URLRequest(url: url)
         req.httpMethod = method
-        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        if let token {
+            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return req
     }
@@ -138,8 +141,12 @@ enum FirestoreREST {
 
     /// List documents in a collection ordered by a single field.
     /// `orderBy` "createdAt DESC" → returns newest first.
+    /// Set `requireAuth=false` to allow this from non-signed-in users —
+    /// works only when Firestore rules permit public read on that
+    /// collection (currently /posts and /spots).
     static func listDocs(in collection: String, limit: Int = 50,
-                         orderByField: String? = nil, descending: Bool = true) async throws -> [(id: String, data: [String: Any])] {
+                         orderByField: String? = nil, descending: Bool = true,
+                         requireAuth: Bool = true) async throws -> [(id: String, data: [String: Any])] {
         var components = URLComponents(url: baseURL.appendingPathComponent(collection), resolvingAgainstBaseURL: false)!
         var items: [URLQueryItem] = [URLQueryItem(name: "pageSize", value: String(limit))]
         if let f = orderByField {
@@ -147,7 +154,7 @@ enum FirestoreREST {
         }
         components.queryItems = items
 
-        var req = try await authedRequest(components.url!, method: "GET")
+        var req = try await authedRequest(components.url!, method: "GET", requireAuth: requireAuth)
         req.httpBody = nil
 
         let (data, response) = try await URLSession.shared.data(for: req)
