@@ -38,7 +38,7 @@ final class FeedService: ObservableObject {
                           userInfo: [NSLocalizedDescriptionKey: "Sign in to post."])
         }
         isPosting = true
-        defer { isPosting = false }
+        do { isPosting = false }
         // TODO: POST to /api/feed/post with multipart form (image + json)
     }
 

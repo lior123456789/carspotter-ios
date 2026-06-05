@@ -11,6 +11,7 @@
 		048BD4565CD256181B8ACF3E /* StoreKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F34DEF8168D4DE7102769F7 /* StoreKitService.swift */; };
 		0DC8BE405C8DF2AD9E2ECC88 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3943ABCCE21F9026D2238A25 /* FirebaseFirestore */; };
 		119A51A3E2B51C5AC8DBC57F /* ComposePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961F760E02987542F4F7E79F /* ComposePostView.swift */; };
+		18302A58A0C963AB67370FA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA259D2B112F966B580E491 /* GoogleService-Info.plist */; };
 		2AB93C81E27DCB5E00B51589 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCA61903C51B9DF3F4B657 /* FirestoreService.swift */; };
 		2B829C517EEB4694B78B08E8 /* GarageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72B3315D4B5015414EDFBB7 /* GarageView.swift */; };
 		2EC366CF02537B0D447E5B32 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34AF78F2F3AD63E6FC22A60 /* SignInView.swift */; };
@@ -43,13 +44,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EF40BCCD4ADBEDEBA2D121 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1EFEB3C9FD8806C948B36E4D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3985D7FEE9D7F21C5D4555EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B91616A874D3E848067B32F /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		4731726A683A36F5973C585C /* SpotMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotMapView.swift; sourceTree = "<group>"; };
 		4E16AC07E1BF96AE1EA4B41B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		4EA259D2B112F966B580E491 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		56F4606363CEC36C5FCB6B34 /* UIImage+Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Orientation.swift"; sourceTree = "<group>"; };
 		5F34DEF8168D4DE7102769F7 /* StoreKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitService.swift; sourceTree = "<group>"; };
 		6696DDFF34BFDA7CD47A5440 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				A018A2A3737DC7AA01FCA153 /* CarSpotter.entitlements */,
 				7CBF8D9F420FC05E473102BE /* CarSpotterApp.swift */,
 				B5FF3C47AAA3C0FE6B7505EF /* ContentView.swift */,
+				4EA259D2B112F966B580E491 /* GoogleService-Info.plist */,
 				722858A4FD2839DA338C25A1 /* Info.plist */,
 			);
 			path = CarSpotter;
@@ -268,6 +271,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					30D24BFE94F1C08EAA72209A = {
+						DevelopmentTeam = "";
+					};
+				};
 			};
 			buildConfigurationList = B694DD0642AFFBC6ADE28644 /* Build configuration list for PBXProject "CarSpotter" */;
 			developmentRegion = en;
@@ -297,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				627B73D15E4BA02EA2AA4933 /* Assets.xcassets in Resources */,
+				18302A58A0C963AB67370FA2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,7 +418,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -498,7 +506,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
