@@ -37,6 +37,7 @@
 		B85219E6A1C0A6E4AD0754CD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A58E6F2340664AEE5902E1 /* PaywallView.swift */; };
 		BC70CAE5285898B97847C2A9 /* IdentifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B843E3A239CF72DF2BFF1FC /* IdentifyService.swift */; };
 		BEF0FFFBB4060C8E983C2D6D /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5F98713970AA4769C4F994 /* FeedService.swift */; };
+		A1B2C3D4E5F600112233A001 /* ModerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600112233F001 /* ModerationService.swift */; };
 		C1AE2BF3828E71FDC5314DF7 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696DDFF34BFDA7CD47A5440 /* GradientButton.swift */; };
 		D299A57F043372C427E0950C /* FirebaseREST.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43DC095B6EA819C654BCB4 /* FirebaseREST.swift */; };
 		D6EC1B0CD4BD5E03DD3A3B63 /* PostCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FED735F432159A520FC601 /* PostCardView.swift */; };
@@ -60,6 +61,7 @@
 		6696DDFF34BFDA7CD47A5440 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		673154C4ED0119B7F61D6F86 /* CarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarInfo.swift; sourceTree = "<group>"; };
 		6A5F98713970AA4769C4F994 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F600112233F001 /* ModerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModerationService.swift; sourceTree = "<group>"; };
 		6B843E3A239CF72DF2BFF1FC /* IdentifyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyService.swift; sourceTree = "<group>"; };
 		704EDF04DBA3A258AEB72E41 /* StatRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatRow.swift; sourceTree = "<group>"; };
 		722858A4FD2839DA338C25A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				4E16AC07E1BF96AE1EA4B41B /* AuthService.swift */,
 				F1E2D3C4B5A6978687554433 /* Entitlements.swift */,
 				6A5F98713970AA4769C4F994 /* FeedService.swift */,
+				A1B2C3D4E5F600112233F001 /* ModerationService.swift */,
 				BF43DC095B6EA819C654BCB4 /* FirebaseREST.swift */,
 				8EFCA61903C51B9DF3F4B657 /* FirestoreService.swift */,
 				6B843E3A239CF72DF2BFF1FC /* IdentifyService.swift */,
@@ -336,6 +339,7 @@
 				B6F90BC0F7F91AF8479D1398 /* ContentView.swift in Sources */,
 				ECD50C914567DF6AA1D2AA49 /* FeedPost.swift in Sources */,
 				BEF0FFFBB4060C8E983C2D6D /* FeedService.swift in Sources */,
+				A1B2C3D4E5F600112233A001 /* ModerationService.swift in Sources */,
 				ACB359F07EEA7D5E38BDE2A4 /* FeedView.swift in Sources */,
 				D299A57F043372C427E0950C /* FirebaseREST.swift in Sources */,
 				2AB93C81E27DCB5E00B51589 /* FirestoreService.swift in Sources */,

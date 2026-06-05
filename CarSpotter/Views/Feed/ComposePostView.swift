@@ -8,6 +8,9 @@ struct ComposePostView: View {
     @State private var caption = ""
     @State private var location = ""
     @State private var busy = false
+    /// Apple Guideline 1.2: posters must agree there is no tolerance for
+    /// objectionable content or abusive users before publishing UGC.
+    @State private var agreedToTerms = false
 
     var body: some View {
         NavigationStack {
@@ -66,11 +69,32 @@ struct ComposePostView: View {
                             .foregroundStyle(.white)
                     }
 
+                    // UGC content agreement (Apple Guideline 1.2)
+                    Button {
+                        agreedToTerms.toggle()
+                    } label: {
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: agreedToTerms ? "checkmark.square.fill" : "square")
+                                .font(.system(size: 18))
+                                .foregroundStyle(agreedToTerms ? Color.spotterCyan : Color.spotterMute)
+                            Text("I agree to the Community Guidelines. I won't post objectionable, abusive, or illegal content. Violations result in removal and account termination.")
+                                .font(.system(size: 12, design: .rounded))
+                                .foregroundStyle(Color.spotterMute)
+                                .multilineTextAlignment(.leading)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                    .buttonStyle(.plain)
+
                     if let err = feed.error {
                         Text(err).font(.system(size: 13)).foregroundStyle(.red)
                     }
 
                     GradientButton(title: "Share to feed", icon: "paperplane.fill", loading: busy) {
+                        guard agreedToTerms else {
+                            feed.error = "Please agree to the Community Guidelines to post."
+                            return
+                        }
                         Task {
                             busy = true
                             do {
@@ -92,6 +116,8 @@ struct ComposePostView: View {
                             busy = false
                         }
                     }
+                    .disabled(!agreedToTerms)
+                    .opacity(agreedToTerms ? 1 : 0.5)
                 }
                 .padding(20)
             }

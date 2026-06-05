@@ -4,8 +4,14 @@ struct PostCardView: View {
     let post: FeedPost
     let onLike: () -> Void
     let onDelete: (() -> Void)?
+    /// Report this post with a chosen reason (UGC compliance).
+    var onReport: ((ModerationService.ReportReason) -> Void)? = nil
+    /// Block this post's author (UGC compliance).
+    var onBlock: (() -> Void)? = nil
 
     @State private var pressed = false
+    @State private var showReportDialog = false
+    @State private var showBlockConfirm = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -29,17 +35,27 @@ struct PostCardView: View {
                     .foregroundStyle(Color.spotterMute)
                 }
                 Spacer()
-                if let onDelete {
-                    Menu {
+                Menu {
+                    if let onDelete {
                         Button(role: .destructive) { onDelete() } label: {
                             Label("Delete post", systemImage: "trash")
                         }
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundStyle(Color.spotterMute)
-                            .padding(8)
                     }
+                    if onReport != nil {
+                        Button { showReportDialog = true } label: {
+                            Label("Report post", systemImage: "flag")
+                        }
+                    }
+                    if onBlock != nil {
+                        Button(role: .destructive) { showBlockConfirm = true } label: {
+                            Label("Block @\(post.displayName)", systemImage: "hand.raised")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(Color.spotterMute)
+                        .padding(8)
                 }
             }
             .padding(12)
@@ -143,6 +159,24 @@ struct PostCardView: View {
         .background(Color.spotterPanel.opacity(0.5))
         .overlay(RoundedRectangle(cornerRadius: 22).stroke(Color.spotterLine))
         .clipShape(RoundedRectangle(cornerRadius: 22))
+        .confirmationDialog("Report this post?",
+                            isPresented: $showReportDialog,
+                            titleVisibility: .visible) {
+            ForEach(ModerationService.ReportReason.allCases) { reason in
+                Button(reason.rawValue) { onReport?(reason) }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Our team reviews reports within 24 hours and removes content that violates our guidelines. You won't see this post again.")
+        }
+        .confirmationDialog("Block @\(post.displayName)?",
+                            isPresented: $showBlockConfirm,
+                            titleVisibility: .visible) {
+            Button("Block", role: .destructive) { onBlock?() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("You won't see posts from @\(post.displayName) anymore.")
+        }
     }
 
     @ViewBuilder private var avatar: some View {

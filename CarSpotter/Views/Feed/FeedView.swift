@@ -17,11 +17,16 @@ struct FeedView: View {
                     ScrollView {
                         LazyVStack(spacing: 14) {
                             ForEach(feed.posts) { post in
+                                let isMine = post.userId == (Auth.auth().currentUser?.uid ?? "")
                                 PostCardView(post: post,
                                              onLike: { Task { await feed.toggleLike(post) } },
-                                             onDelete: post.userId == (Auth.auth().currentUser?.uid ?? "")
+                                             onDelete: isMine
                                                 ? { Task { try? await feed.delete(post) } }
-                                                : nil)
+                                                : nil,
+                                             onReport: isMine ? nil
+                                                : { reason in Task { await feed.report(post, reason: reason) } },
+                                             onBlock: isMine ? nil
+                                                : { feed.block(post) })
                                     .transition(.opacity)
                             }
                         }

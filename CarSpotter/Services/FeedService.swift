@@ -38,9 +38,13 @@ final class FeedService: ObservableObject {
                 requireAuth: false   // /posts is public-read
             )
             let myUid = Auth.auth().currentUser?.uid ?? ""
+            let mod = ModerationService.shared
             posts = docs.compactMap { d -> FeedPost? in
                 let data = d.data
+                // UGC compliance: hide posts from blocked users + reported posts.
+                if mod.hiddenPostIds.contains(d.id) { return nil }
                 guard let userId = data["userId"] as? String,
+                      !mod.isBlocked(userId),
                       let displayName = data["displayName"] as? String,
                       let photoUrl = data["photoUrl"] as? String,
                       let make = data["make"] as? String,
@@ -85,6 +89,13 @@ final class FeedService: ObservableObject {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "Feed", code: 401,
                           userInfo: [NSLocalizedDescriptionKey: "Sign in to post."])
+        }
+        // UGC compliance: pre-publish moderation on the caption.
+        if let term = ModerationService.shared.firstBlockedTerm(in: caption) {
+            print("[FeedService] caption blocked on term: \(term)")
+            throw NSError(domain: "Feed", code: 422,
+                          userInfo: [NSLocalizedDescriptionKey:
+                            "Your caption violates our content guidelines. Please revise it and try again."])
         }
         isPosting = true
         defer { isPosting = false }
@@ -149,6 +160,19 @@ final class FeedService: ObservableObject {
             }
             self.error = error.localizedDescription
         }
+    }
+
+    /// Report a post (UGC compliance). Files to the moderation queue and
+    /// removes it from the feed immediately.
+    func report(_ post: FeedPost, reason: ModerationService.ReportReason) async {
+        await ModerationService.shared.report(post: post, reason: reason)
+        posts.removeAll { $0.id == post.id }
+    }
+
+    /// Block a post's author (UGC compliance). Hides all of their posts.
+    func block(_ post: FeedPost) {
+        ModerationService.shared.block(userId: post.userId)
+        posts.removeAll { $0.userId == post.userId }
     }
 
     func delete(_ post: FeedPost) async throws {
