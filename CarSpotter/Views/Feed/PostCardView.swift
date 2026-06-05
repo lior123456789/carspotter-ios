@@ -6,25 +6,24 @@ struct PostCardView: View {
     let onDelete: (() -> Void)?
 
     @State private var pressed = false
-    @State private var loadedImage: UIImage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // ── Header row ──
+            // ── Header: avatar + username + time + location ──
             HStack(spacing: 10) {
                 avatar
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(post.displayName)
+                    Text("@" + post.displayName)
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
+                        .lineLimit(1)
                     HStack(spacing: 4) {
                         Text(post.timeAgo)
                             .font(.system(size: 11, design: .rounded))
-                            .foregroundStyle(Color.spotterMute)
                         if let loc = post.location {
-                            Text("·").foregroundStyle(Color.spotterMute)
+                            Text("·")
                             Image(systemName: "mappin.circle.fill").font(.system(size: 9))
-                            Text(loc).font(.system(size: 11, design: .rounded))
+                            Text(loc).font(.system(size: 11, design: .rounded)).lineLimit(1)
                         }
                     }
                     .foregroundStyle(Color.spotterMute)
@@ -45,55 +44,53 @@ struct PostCardView: View {
             }
             .padding(12)
 
-            // ── Hero photo ──
-            ZStack(alignment: .bottomLeading) {
-                AsyncImage(url: URL(string: post.photoUrl)) { phase in
-                    switch phase {
-                    case .empty:
-                        Rectangle().fill(Color.spotterPanel)
-                            .overlay(ProgressView().tint(Color.spotterCyan))
-                    case .success(let img):
-                        img.resizable().scaledToFill()
-                    case .failure:
-                        Rectangle().fill(Color.spotterPanel)
-                            .overlay(Image(systemName: "photo.fill").foregroundStyle(Color.spotterMute))
-                    @unknown default:
-                        Rectangle().fill(Color.spotterPanel)
-                    }
+            // ── Hero photo (no overlay — clean) ──
+            AsyncImage(url: URL(string: post.photoUrl)) { phase in
+                switch phase {
+                case .empty:
+                    Rectangle().fill(Color.spotterPanel)
+                        .overlay(ProgressView().tint(Color.spotterCyan))
+                case .success(let img):
+                    img.resizable().scaledToFill()
+                case .failure:
+                    Rectangle().fill(Color.spotterPanel)
+                        .overlay(Image(systemName: "photo.fill").foregroundStyle(Color.spotterMute))
+                @unknown default:
+                    Rectangle().fill(Color.spotterPanel)
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 320)
-                .clipped()
-
-                LinearGradient(colors: [.clear, .black.opacity(0.75)],
-                               startPoint: .center, endPoint: .bottom)
-
-                // Car info overlay
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        BadgePill(label: post.category, color: .spotterCyan)
-                        if post.rarity >= 8 {
-                            BadgePill(label: "Rare \(post.rarity)/10",
-                                      icon: "trophy.fill", color: .yellow)
-                        }
-                    }
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text("\(post.year)").font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.7))
-                        Text("\(post.make) \(post.model)")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                            .lineLimit(2)
-                    }
-                    Text(post.valueRange)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundStyle(LinearGradient.spotterBrand)
-                }
-                .padding(14)
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 280)
+            .clipped()
 
-            // ── Caption + actions ──
-            VStack(alignment: .leading, spacing: 10) {
+            // ── Car info row (BELOW the image, no overflow possible) ──
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 6) {
+                    BadgePill(label: post.category, color: .spotterCyan)
+                    if post.rarity >= 8 {
+                        BadgePill(label: "Rare \(post.rarity)/10",
+                                  icon: "trophy.fill", color: .yellow)
+                    }
+                    Spacer(minLength: 0)
+                }
+
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(post.year)
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.7))
+                    Text("\(post.make) \(post.model)")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                    Spacer(minLength: 0)
+                }
+
+                Text(post.valueRange)
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .foregroundStyle(LinearGradient.spotterBrand)
+                    .lineLimit(1)
+
                 if !post.caption.isEmpty {
                     Text(post.caption)
                         .font(.system(size: 14, design: .rounded))
@@ -101,11 +98,13 @@ struct PostCardView: View {
                         .lineSpacing(2)
                         .padding(.top, 4)
                 }
-                HStack(spacing: 18) {
-                    Button(action: {
+
+                // ── Like + share row ──
+                HStack(spacing: 12) {
+                    Button {
                         let g = UIImpactFeedbackGenerator(style: .light); g.impactOccurred()
                         onLike()
-                    }) {
+                    } label: {
                         HStack(spacing: 5) {
                             Image(systemName: post.likedByMe ? "heart.fill" : "heart")
                                 .foregroundStyle(post.likedByMe ? .red : .white)
@@ -120,13 +119,11 @@ struct PostCardView: View {
                         .overlay(Capsule().stroke(Color.spotterLine))
                         .clipShape(Capsule())
                     }
-                    .scaleEffect(pressed ? 0.94 : 1)
-                    .animation(.spring(response: 0.25, dampingFraction: 0.6), value: pressed)
-
                     Spacer()
-
-                    ShareLink(item: URL(string: post.photoUrl) ?? URL(string: "https://carsspotter.com")!,
-                              subject: Text("\(post.year) \(post.make) \(post.model)")) {
+                    ShareLink(
+                        item: URL(string: post.photoUrl) ?? URL(string: "https://carsspotter.com")!,
+                        subject: Text("\(post.year) \(post.make) \(post.model)")
+                    ) {
                         HStack(spacing: 5) {
                             Image(systemName: "square.and.arrow.up")
                             Text("Share").font(.system(size: 13, weight: .semibold, design: .rounded))
@@ -139,6 +136,7 @@ struct PostCardView: View {
                         .clipShape(Capsule())
                     }
                 }
+                .padding(.top, 4)
             }
             .padding(12)
         }
