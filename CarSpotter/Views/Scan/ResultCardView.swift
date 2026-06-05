@@ -1,9 +1,14 @@
 import SwiftUI
+import FirebaseAuth
 
 struct ResultCardView: View {
     let car: CarInfo
     let onScanAnother: () -> Void
     @State private var showShare = false
+    @State private var savingToGarage = false
+    @State private var savedToGarage = false
+    @State private var saveError: String?
+    @StateObject private var garage = FirestoreService()
 
     var body: some View {
         ScrollView {
@@ -144,9 +149,35 @@ struct ResultCardView: View {
                         GradientButton(title: "Share to feed", icon: "paperplane.fill") {
                             showShare = true
                         }
-                        GradientButton(title: "Save to garage",
-                                       icon: "tray.and.arrow.down.fill",
-                                       style: .ghost) {}
+                        GradientButton(
+                            title: savedToGarage ? "Saved ✓" : "Save to garage",
+                            icon: savedToGarage ? "checkmark.circle.fill" : "tray.and.arrow.down.fill",
+                            loading: savingToGarage,
+                            style: savedToGarage ? .secondary : .ghost
+                        ) {
+                            Task {
+                                guard let uid = Auth.auth().currentUser?.uid else {
+                                    saveError = "Sign in to save to your garage."
+                                    return
+                                }
+                                savingToGarage = true
+                                do {
+                                    try await garage.saveScan(car, userId: uid)
+                                    savedToGarage = true
+                                } catch {
+                                    saveError = error.localizedDescription
+                                }
+                                savingToGarage = false
+                            }
+                        }
+                        .disabled(savedToGarage)
+
+                        if let err = saveError {
+                            Text(err)
+                                .font(.system(size: 12, design: .rounded))
+                                .foregroundStyle(.red)
+                                .padding(.horizontal, 4)
+                        }
                         GradientButton(title: "Scan another",
                                        icon: "camera.viewfinder",
                                        style: .ghost) {
