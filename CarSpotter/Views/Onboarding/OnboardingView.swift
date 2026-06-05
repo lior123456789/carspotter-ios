@@ -69,7 +69,7 @@ struct OnboardingView: View {
                             withAnimation(.spring()) { page = slides.count - 1 }
                         }
                         .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(.spotterMute)
+                        .foregroundStyle(Color.spotterMute)
                     }
                 }
                 .padding(.horizontal, 24)
