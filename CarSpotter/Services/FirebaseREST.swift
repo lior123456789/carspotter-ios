@@ -167,6 +167,57 @@ enum FirestoreREST {
         }
     }
 
+    /// Run a structured query — supports a single field-equals filter.
+    /// This is what we MUST use for "list my scans" because Firestore
+    /// security rules require the query to be statically provable as
+    /// matching only the user's docs (i.e. the filter must be present).
+    static func queryDocs(
+        collection: String,
+        whereField: String,
+        equalToString: String,
+        orderByField: String? = nil,
+        descending: Bool = true,
+        limit: Int = 100,
+    ) async throws -> [(id: String, data: [String: Any])] {
+        let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectID)/databases/(default)/documents:runQuery")!
+        var req = try await authedRequest(url, method: "POST")
+
+        var structuredQuery: [String: Any] = [
+            "from": [["collectionId": collection]],
+            "where": [
+                "fieldFilter": [
+                    "field": ["fieldPath": whereField],
+                    "op": "EQUAL",
+                    "value": ["stringValue": equalToString],
+                ],
+            ],
+            "limit": limit,
+        ]
+        if let f = orderByField {
+            structuredQuery["orderBy"] = [[
+                "field": ["fieldPath": f],
+                "direction": descending ? "DESCENDING" : "ASCENDING",
+            ]]
+        }
+
+        req.httpBody = try JSONSerialization.data(withJSONObject: ["structuredQuery": structuredQuery])
+
+        let (data, response) = try await URLSession.shared.data(for: req)
+        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw FirebaseRESTError.http((response as? HTTPURLResponse)?.statusCode ?? 0,
+                                         String(data: data, encoding: .utf8) ?? "")
+        }
+        // runQuery returns an ARRAY of { document?: {...} } entries
+        guard let arr = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else { return [] }
+        return arr.compactMap { entry in
+            guard let doc = entry["document"] as? [String: Any],
+                  let name = doc["name"] as? String,
+                  let fields = doc["fields"] as? [String: Any] else { return nil }
+            return (id: name.components(separatedBy: "/").last ?? "",
+                    data: decodeFields(fields))
+        }
+    }
+
     /// Delete a document.
     static func deleteDoc(path: String) async throws {
         let url = baseURL.appendingPathComponent(path)

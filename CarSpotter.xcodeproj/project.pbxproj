@@ -45,7 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EF40BCCD4ADBEDEBA2D121 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1EFEB3C9FD8806C948B36E4D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3985D7FEE9D7F21C5D4555EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -274,11 +274,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					30D24BFE94F1C08EAA72209A = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = B694DD0642AFFBC6ADE28644 /* Build configuration list for PBXProject "CarSpotter" */;
 			developmentRegion = en;
@@ -422,6 +417,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -510,6 +506,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
