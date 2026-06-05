@@ -1,5 +1,4 @@
 import SwiftUI
-import AuthenticationServices
 
 struct SignInView: View {
     @EnvironmentObject private var auth: AuthService
@@ -49,35 +48,9 @@ struct SignInView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    // Sign in with Apple — native, no Firebase config needed
-                    SignInWithAppleButton(.continue, onRequest: { req in
-                        let appleRequest = auth.startAppleSignIn()
-                        req.requestedScopes = appleRequest.requestedScopes
-                        req.nonce = appleRequest.nonce
-                    }, onCompletion: { result in
-                        if case .success(let authorization) = result {
-                            Task { await auth.handleAppleAuthorization(authorization) }
-                        }
-                    })
-                    .signInWithAppleButtonStyle(.white)
-                    .frame(height: 52)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-                    GradientButton(title: "Continue as guest",
-                                   icon: "person.fill.questionmark",
-                                   style: .ghost) {
-                        Task { await auth.signInAnonymously() }
-                    }
-
-                    HStack {
-                        Rectangle().fill(Color.spotterLine).frame(height: 1)
-                        Text("or with email")
-                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundStyle(Color.spotterMute)
-                            .padding(.horizontal, 10)
-                        Rectangle().fill(Color.spotterLine).frame(height: 1)
-                    }
-
+                    // Email/password — uses the SAME Firebase Auth user
+                    // pool as carsspotter.com, so accounts created on the
+                    // web work here and vice-versa.
                     VStack(spacing: 12) {
                         TextField("", text: $email, prompt: Text("you@example.com").foregroundColor(.spotterMute))
                             .keyboardType(.emailAddress)
@@ -129,6 +102,13 @@ struct SignInView: View {
                             .font(.system(size: 14, design: .rounded))
                             .foregroundStyle(Color.spotterMute)
                     }
+
+                    GradientButton(title: "Continue as guest",
+                                   icon: "person.fill.questionmark",
+                                   style: .ghost) {
+                        Task { await auth.signInAnonymously() }
+                    }
+                    .padding(.top, 6)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 40)

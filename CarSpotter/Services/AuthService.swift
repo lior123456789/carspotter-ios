@@ -1,7 +1,5 @@
 import Foundation
 import FirebaseAuth
-import AuthenticationServices
-import CryptoKit
 
 @MainActor
 final class AuthService: NSObject, ObservableObject {
@@ -10,7 +8,6 @@ final class AuthService: NSObject, ObservableObject {
     @Published var lastError: String?
 
     private var handle: AuthStateDidChangeListenerHandle?
-    private var currentNonce: String?
 
     static var preview: AuthService {
         let s = AuthService()
@@ -28,40 +25,10 @@ final class AuthService: NSObject, ObservableObject {
         }
     }
 
-    // ── Sign in with Apple ───────────────────────────────────────────────
-
-    func startAppleSignIn() -> ASAuthorizationAppleIDRequest {
-        let nonce = randomNonceString()
-        currentNonce = nonce
-        let provider = ASAuthorizationAppleIDProvider()
-        let req = provider.createRequest()
-        req.requestedScopes = [.fullName, .email]
-        req.nonce = sha256(nonce)
-        return req
-    }
-
-    func handleAppleAuthorization(_ authorization: ASAuthorization) async {
-        guard let cred = authorization.credential as? ASAuthorizationAppleIDCredential,
-              let tokenData = cred.identityToken,
-              let token = String(data: tokenData, encoding: .utf8),
-              let nonce = currentNonce
-        else {
-            lastError = "Apple sign-in failed."
-            return
-        }
-        let credential = OAuthProvider.appleCredential(
-            withIDToken: token,
-            rawNonce: nonce,
-            fullName: cred.fullName
-        )
-        do {
-            try await Auth.auth().signIn(with: credential)
-        } catch {
-            lastError = error.localizedDescription
-        }
-    }
-
     // ── Email / password ─────────────────────────────────────────────────
+    // Uses the SAME Firebase Auth user pool (project carspotter-c0863)
+    // as the website, so accounts created at carsspotter.com sign-in
+    // here, and accounts created in the iOS app sign-in on the web.
 
     func signIn(email: String, password: String) async {
         do {
@@ -106,28 +73,4 @@ final class AuthService: NSObject, ObservableObject {
         _ = try? await URLSession.shared.data(for: req)
     }
 
-    // ── Nonce helpers (Apple Sign-In requirement) ────────────────────────
-
-    private func randomNonceString(length: Int = 32) -> String {
-        let charset: [Character] =
-            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-        var result = ""
-        var remaining = length
-        while remaining > 0 {
-            var bytes = [UInt8](repeating: 0, count: 16)
-            _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
-            for byte in bytes where remaining > 0 {
-                if byte < charset.count {
-                    result.append(charset[Int(byte)])
-                    remaining -= 1
-                }
-            }
-        }
-        return result
-    }
-
-    private func sha256(_ input: String) -> String {
-        let data = Data(input.utf8)
-        return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
-    }
 }
