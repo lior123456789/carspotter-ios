@@ -32,6 +32,7 @@ struct CarSpotterApp: App {
 private struct RootView: View {
     @EnvironmentObject private var auth: AuthService
     @AppStorage("carspotter.hasSeenOnboarding") private var hasSeenOnboarding = false
+    @AppStorage("carspotter.usernameSet") private var usernameSet = false
 
     var body: some View {
         Group {
@@ -44,6 +45,8 @@ private struct RootView: View {
                 OnboardingView(onDone: { hasSeenOnboarding = true })
             } else if auth.user == nil {
                 SignInView()
+            } else if !usernameSet && (auth.user?.displayName ?? "").isEmpty {
+                UsernameSetupView(onDone: { usernameSet = true })
             } else {
                 ContentView()
             }

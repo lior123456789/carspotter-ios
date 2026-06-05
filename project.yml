@@ -41,8 +41,8 @@ targets:
           UIColorName: ""
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
-        UIRequiredDeviceCapabilities:
-          - armv7
+        CFBundleIconName: AppIcon
+        LSRequiresIPhoneOS: true
         ITSAppUsesNonExemptEncryption: false
         NSCameraUsageDescription: CarSpotter uses the camera to identify cars instantly.
         NSPhotoLibraryUsageDescription: Pick a photo from your library to identify the car.
@@ -50,7 +50,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.carsspotter
-        TARGETED_DEVICE_FAMILY: "1,2"
+        TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         GENERATE_INFOPLIST_FILE: NO
@@ -58,12 +58,3 @@ targets:
     dependencies:
       - package: Firebase
         product: FirebaseAuth
-      - package: Firebase
-        product: FirebaseFirestore
-      - package: Firebase
-        product: FirebaseStorage
-    entitlements:
-      path: CarSpotter/CarSpotter.entitlements
-      properties:
-        com.apple.developer.applesignin:
-          - Default

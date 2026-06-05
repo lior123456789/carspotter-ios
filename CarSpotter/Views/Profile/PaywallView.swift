@@ -80,20 +80,47 @@ struct PaywallView: View {
                     }
                     .padding(.top, 4)
 
-                    HStack(spacing: 16) {
-                        Button("Restore") { Task { await store.restore() } }
-                        Text("·")
-                        Button("Terms") { open("https://carsspotter.com/terms") }
-                        Text("·")
-                        Button("Privacy") { open("https://carsspotter.com/privacy") }
+                    // ── Apple-required subscription disclosure ──
+                    VStack(spacing: 10) {
+                        Text(legalBlurb)
+                            .font(.system(size: 11, design: .rounded))
+                            .foregroundStyle(Color.spotterMute)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(2)
+                            .padding(.horizontal, 6)
+
+                        HStack(spacing: 16) {
+                            Button("Restore") { Task { await store.restore() } }
+                            Text("·")
+                            Button("Terms of Use") { open("https://carsspotter.com/terms") }
+                            Text("·")
+                            Button("Privacy Policy") { open("https://carsspotter.com/privacy") }
+                        }
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.8))
                     }
-                    .font(.system(size: 12, design: .rounded))
-                    .foregroundStyle(Color.spotterMute)
+                    .padding(.top, 6)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 30)
             }
         }
+        .task { await store.loadProducts() }
+    }
+
+    /// Apple requires this exact information on the paywall:
+    /// title + length + price of subscription, auto-renewal language,
+    /// cancellation instructions, links to Terms (EULA) + Privacy.
+    private var legalBlurb: String {
+        let period = billing == .monthly ? "month" : "year"
+        let price = currentProduct?.displayPrice
+            ?? (billing == .monthly ? selected.monthlyPrice : selected.yearlyPrice)
+        return """
+        \(selected.displayName) — auto-renewable subscription, \(price) per \(period).
+        Payment is charged to your Apple ID at confirmation of purchase. \
+        Your subscription auto-renews unless you turn off auto-renew at least 24 hours \
+        before the end of the current period. Manage or cancel any time in Settings → Apple ID → Subscriptions.
+        """
     }
 
     private func tierRow(_ tier: UserProfile.Plan) -> some View {

@@ -3,10 +3,19 @@ import PhotosUI
 
 struct ScanView: View {
     @EnvironmentObject private var auth: AuthService
+    @EnvironmentObject private var store: StoreKitService
     @StateObject private var identify = IdentifyService()
+    @StateObject private var entitlements = Entitlements.shared
     @State private var showCamera = false
     @State private var showPhotoPicker = false
     @State private var showPaywall = false
+
+    private var canScan: Bool {
+        entitlements.canScan(tier: store.purchasedTier)
+    }
+    private var scansRemaining: Int {
+        max(0, Entitlements.freeScanQuota - entitlements.freeScansUsed)
+    }
 
     var body: some View {
         NavigationStack {
@@ -48,13 +57,13 @@ struct ScanView: View {
             }
             .sheet(isPresented: $showPhotoPicker) {
                 PhotoPicker { image in
-                    Task { await identify.identify(image) }
+                    Task { await runIdentify(image) }
                 }
                 .ignoresSafeArea()
             }
             .fullScreenCover(isPresented: $showCamera) {
                 CameraPicker { image in
-                    Task { await identify.identify(image) }
+                    Task { await runIdentify(image) }
                 }
                 .ignoresSafeArea()
             }
@@ -90,14 +99,29 @@ struct ScanView: View {
 
             VStack(spacing: 12) {
                 GradientButton(title: "Open camera", icon: "camera.fill") {
-                    showCamera = true
+                    if canScan { showCamera = true } else { showPaywall = true }
                 }
                 GradientButton(title: "Upload from library", icon: "photo.on.rectangle", style: .ghost) {
-                    showPhotoPicker = true
+                    if canScan { showPhotoPicker = true } else { showPaywall = true }
+                }
+                if store.purchasedTier == .free {
+                    Text(scansRemaining > 0
+                         ? "\(scansRemaining) free \(scansRemaining == 1 ? "scan" : "scans") left · upgrade for unlimited"
+                         : "Free scans used — upgrade to keep spotting")
+                        .font(.system(size: 12, design: .rounded))
+                        .foregroundStyle(Color.spotterMute)
                 }
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
+        }
+    }
+
+    private func runIdentify(_ image: UIImage) async {
+        guard canScan else { showPaywall = true; return }
+        await identify.identify(image)
+        if identify.result != nil, store.purchasedTier == .free {
+            entitlements.recordScan()
         }
     }
 }
