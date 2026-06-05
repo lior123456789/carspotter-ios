@@ -31,6 +31,7 @@ struct CarSpotterApp: App {
 
 private struct RootView: View {
     @EnvironmentObject private var auth: AuthService
+    @AppStorage("carspotter.hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some View {
         Group {
@@ -39,6 +40,8 @@ private struct RootView: View {
                     Color.spotterInk.ignoresSafeArea()
                     ProgressView().tint(Color.spotterCyan)
                 }
+            } else if !hasSeenOnboarding {
+                OnboardingView(onDone: { hasSeenOnboarding = true })
             } else if auth.user == nil {
                 SignInView()
             } else {

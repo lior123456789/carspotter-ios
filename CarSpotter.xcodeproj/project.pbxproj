@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		020957B0E9348FDEE34551CF /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9CC9B5D743253412E51571 /* Spot.swift */; };
 		048BD4565CD256181B8ACF3E /* StoreKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F34DEF8168D4DE7102769F7 /* StoreKitService.swift */; };
+		061F49086C978FBD587F40EA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77058D0319E61F9C4C38A65 /* OnboardingView.swift */; };
 		0DC8BE405C8DF2AD9E2ECC88 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3943ABCCE21F9026D2238A25 /* FirebaseFirestore */; };
 		119A51A3E2B51C5AC8DBC57F /* ComposePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961F760E02987542F4F7E79F /* ComposePostView.swift */; };
 		18302A58A0C963AB67370FA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA259D2B112F966B580E491 /* GoogleService-Info.plist */; };
@@ -45,7 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07523B15D8F5A3F6E331A078 /* CarSpotter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EF40BCCD4ADBEDEBA2D121 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1EFEB3C9FD8806C948B36E4D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3985D7FEE9D7F21C5D4555EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -70,6 +71,7 @@
 		A018A2A3737DC7AA01FCA153 /* CarSpotter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarSpotter.entitlements; sourceTree = "<group>"; };
 		A4886767F499D1C8983BB6AC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A4B9852786A6EE0F56EE7C6D /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		A77058D0319E61F9C4C38A65 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B17054CFEA04CA9636EC52B8 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		B5FF3C47AAA3C0FE6B7505EF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B6A58E6F2340664AEE5902E1 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 			path = Scan;
 			sourceTree = "<group>";
 		};
+		50391141FF2E72CF9A4919A5 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A77058D0319E61F9C4C38A65 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		5E884C9578D8A5F9FCFBFF1C /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +184,7 @@
 				7784F7A8F8A1CFB7DB8238BB /* Feed */,
 				F0CDD587489DAC2630AE27B1 /* Garage */,
 				C74ED784CE752C34107D04A8 /* Map */,
+				50391141FF2E72CF9A4919A5 /* Onboarding */,
 				7CBF4493F87D87CD4910E2A3 /* Profile */,
 				1DF865D828923AC808C6F00A /* Scan */,
 			);
@@ -274,6 +285,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					30D24BFE94F1C08EAA72209A = {
+						DevelopmentTeam = "";
+					};
+				};
 			};
 			buildConfigurationList = B694DD0642AFFBC6ADE28644 /* Build configuration list for PBXProject "CarSpotter" */;
 			developmentRegion = en;
@@ -331,6 +347,7 @@
 				2B829C517EEB4694B78B08E8 /* GarageView.swift in Sources */,
 				C1AE2BF3828E71FDC5314DF7 /* GradientButton.swift in Sources */,
 				BC70CAE5285898B97847C2A9 /* IdentifyService.swift in Sources */,
+				061F49086C978FBD587F40EA /* OnboardingView.swift in Sources */,
 				B85219E6A1C0A6E4AD0754CD /* PaywallView.swift in Sources */,
 				D6EC1B0CD4BD5E03DD3A3B63 /* PostCardView.swift in Sources */,
 				5A6E91F14BA97BEB73F8ABEE /* ProfileView.swift in Sources */,
@@ -417,7 +434,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -506,7 +522,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CarSpotter/CarSpotter.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8Z6U974D25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CarSpotter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
