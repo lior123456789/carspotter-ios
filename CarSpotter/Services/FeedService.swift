@@ -39,10 +39,14 @@ final class FeedService: ObservableObject {
             )
             let myUid = Auth.auth().currentUser?.uid ?? ""
             let mod = ModerationService.shared
+            // Feed shows TODAY's spots only — anything before local midnight is dropped.
+            let startOfToday = Calendar.current.startOfDay(for: Date())
             posts = docs.compactMap { d -> FeedPost? in
                 let data = d.data
                 // UGC compliance: hide posts from blocked users + reported posts.
                 if mod.hiddenPostIds.contains(d.id) { return nil }
+                // Only today's posts.
+                guard let createdAt = data["createdAt"] as? Date, createdAt >= startOfToday else { return nil }
                 guard let userId = data["userId"] as? String,
                       !mod.isBlocked(userId),
                       let displayName = data["displayName"] as? String,
@@ -67,7 +71,7 @@ final class FeedService: ObservableObject {
                     valueRange: data["valueRange"] as? String ?? "—",
                     caption: data["caption"] as? String ?? "",
                     location: (data["location"] as? String).flatMap { $0.isEmpty ? nil : $0 },
-                    createdAt: (data["createdAt"] as? Date) ?? Date(),
+                    createdAt: createdAt,
                     likeCount: likedByStrings.count,
                     likedByMe: likedByStrings.contains(myUid),
                     likedBy: likedByStrings
