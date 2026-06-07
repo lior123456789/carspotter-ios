@@ -1,0 +1,40 @@
+{
+  "name": "carspotter-remotion-ads",
+  "version": "1.0.0",
+  "description": "CarSpotter vertical social ads (9:16)",
+  "repository": {},
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.457",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.457",
+    "@remotion/tailwind-v4": "4.0.457",
+    "tailwindcss": "4.0.0"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.457",
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "eslint": "9.19.0",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotionb studio",
+    "build": "remotionb bundle",
+    "upgrade": "remotionb upgrade",
+    "lint": "eslint src && tsc",
+    "studio": "remotionb studio",
+    "render": "remotion render Ad1 out/ad1.mp4 && remotion render Ad2 out/ad2.mp4 && remotion render Ad3 out/ad3.mp4 && remotion render Ad4 out/ad4.mp4 && remotion render Ad5 out/ad5.mp4",
+    "render:1": "remotion render Ad1 out/ad1.mp4",
+    "render:2": "remotion render Ad2 out/ad2.mp4",
+    "render:3": "remotion render Ad3 out/ad3.mp4",
+    "render:4": "remotion render Ad4 out/ad4.mp4",
+    "render:5": "remotion render Ad5 out/ad5.mp4"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}
