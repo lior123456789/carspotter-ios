@@ -24,6 +24,24 @@ final class StoreKitService: ObservableObject {
     /// the tier no longer leaks to every account on the same Apple ID.
     private(set) var accountToken: UUID?
     private var currentUid: String?
+    private var updatesTask: Task<Void, Never>?
+
+    init() {
+        // Listen for transactions that complete outside the direct purchase
+        // flow — renewals, Ask-to-Buy approvals, purchases finished on another
+        // device, or interrupted purchases. Without this, subscriptions can be
+        // missed (StoreKit warns about exactly this).
+        updatesTask = Task { [weak self] in
+            for await result in Transaction.updates {
+                if case .verified(let transaction) = result {
+                    await transaction.finish()
+                    await self?.refreshEntitlements()
+                }
+            }
+        }
+    }
+
+    deinit { updatesTask?.cancel() }
 
     static var preview: StoreKitService {
         let s = StoreKitService()
