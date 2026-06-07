@@ -1,4 +1,4 @@
-import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from 'remotion'
+import { AbsoluteFill, Audio, Sequence, staticFile, interpolate, useCurrentFrame } from 'remotion'
 import { fadeInOut, slideUp, scaleIn } from './lib/anim'
 import { Bg, MUTE, CYAN, VIOLET, BRAND_GRAD } from './lib/brand'
 
@@ -64,6 +64,7 @@ function CTA() {
 
 export const Spot3: React.FC = () => (
   <AbsoluteFill>
+    <Audio src={staticFile('audio/vo3.m4a')} />
     <Bg />
     <Sequence from={0}><Intro /></Sequence>
     <Sequence from={0}><Title /></Sequence>
