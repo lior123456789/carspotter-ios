@@ -23,6 +23,7 @@ final class StoreKitService: ObservableObject {
     /// Apple-ID-level purchase to a specific CarSpotter (Firebase) account, so
     /// the tier no longer leaks to every account on the same Apple ID.
     private(set) var accountToken: UUID?
+    private var currentUid: String?
 
     static var preview: StoreKitService {
         let s = StoreKitService()
@@ -44,8 +45,39 @@ final class StoreKitService: ObservableObject {
     /// Called when the signed-in account changes. Rebinds the token and
     /// re-evaluates the tier for the new account (resets to free on sign-out).
     func setAccount(uid: String?) async {
+        currentUid = (uid?.isEmpty == false) ? uid : nil
         accountToken = Self.token(for: uid)
-        await updatePurchasedTier()
+        await refreshEntitlements()
+    }
+
+    /// Full entitlement refresh: StoreKit purchases AND the server plan
+    /// (web/Stripe subscriptions written to Firestore). Takes the higher tier.
+    func refreshEntitlements() async {
+        await updatePurchasedTier()   // Apple / StoreKit
+        await mergeServerPlan()       // web / Stripe via Firestore
+    }
+
+    /// Reads /users/{uid}.plan (set by a Stripe purchase on the website) and
+    /// upgrades the tier if the server plan is higher than what StoreKit shows.
+    private func mergeServerPlan() async {
+        guard let uid = currentUid else { return }
+        do {
+            if let data = try await FirestoreREST.getDoc(path: "users/\(uid)"),
+               let planStr = data["plan"] as? String,
+               let serverPlan = UserProfile.Plan(rawValue: planStr),
+               serverPlan.rank > purchasedTier.rank {
+                purchasedTier = serverPlan
+            }
+        } catch {
+            // Network/permission error — keep the StoreKit tier, don't downgrade.
+        }
+    }
+
+    /// Mirror an Apple purchase to Firestore so the website (and other devices)
+    /// recognize it too.
+    private func syncTierToServer() async {
+        guard let uid = currentUid, purchasedTier != .free else { return }
+        try? await FirestoreREST.setDoc(path: "users/\(uid)", data: ["plan": purchasedTier.rawValue])
     }
 
     func loadProducts() async {
@@ -69,6 +101,7 @@ final class StoreKitService: ObservableObject {
                 if case .verified(let transaction) = verification {
                     await transaction.finish()
                     await updatePurchasedTier()
+                    await syncTierToServer()
                     return true
                 }
             case .userCancelled, .pending: return false
@@ -82,22 +115,21 @@ final class StoreKitService: ObservableObject {
 
     func restore() async {
         try? await AppStore.sync()
-        await updatePurchasedTier()
+        await refreshEntitlements()
     }
 
-    /// Walks current entitlements and sets the highest active tier that
-    /// belongs to the signed-in account. Entitlements whose `appAccountToken`
-    /// doesn't match this account are ignored, so a subscription bought on one
-    /// account no longer unlocks features on another account that happens to
-    /// share the same Apple ID.
+    /// Walks current StoreKit entitlements and sets the highest active tier for
+    /// this account. A transaction counts if it's stamped for THIS account
+    /// (appAccountToken match) OR is untagged (nil) — StoreKit/sandbox doesn't
+    /// always populate appAccountToken, so the nil fallback prevents a real
+    /// purchase from going unrecognized. Tagged purchases keep tiers from
+    /// leaking to other accounts on the same Apple ID.
     func updatePurchasedTier() async {
-        // No signed-in account (or signed out) → nothing is unlocked.
-        guard let accountToken else { purchasedTier = .free; return }
         var best: UserProfile.Plan = .free
         for await result in Transaction.currentEntitlements {
             if case .verified(let transaction) = result {
-                // Only count purchases stamped for THIS account.
-                guard transaction.appAccountToken == accountToken else { continue }
+                let tok = transaction.appAccountToken
+                guard tok == accountToken || tok == nil else { continue }
                 let id = transaction.productID
                 if id.contains(".concours") { best = .concours }
                 else if id.contains(".collector"), best != .concours { best = .collector }

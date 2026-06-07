@@ -5,6 +5,16 @@ struct UserProfile: Codable, Equatable {
         case free, spotter, collector, concours
         var id: String { rawValue }
 
+        /// Higher = more access. Used to pick the best of StoreKit vs. server plan.
+        var rank: Int {
+            switch self {
+            case .free: return 0
+            case .spotter: return 1
+            case .collector: return 2
+            case .concours: return 3
+            }
+        }
+
         var displayName: String {
             switch self {
             case .free:      return "Free"

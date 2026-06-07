@@ -139,6 +139,23 @@ enum FirestoreREST {
         }
     }
 
+    /// Read a single document by path (e.g. "users/{uid}"). Returns nil if it
+    /// doesn't exist. Used to pick up web/Stripe purchases written to Firestore.
+    static func getDoc(path: String) async throws -> [String: Any]? {
+        let url = baseURL.appendingPathComponent(path)
+        var req = try await authedRequest(url, method: "GET")
+        req.httpBody = nil
+        let (data, response) = try await URLSession.shared.data(for: req)
+        guard let http = response as? HTTPURLResponse else { throw FirebaseRESTError.decode }
+        if http.statusCode == 404 { return nil }
+        guard (200..<300).contains(http.statusCode) else {
+            throw FirebaseRESTError.http(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let fields = json["fields"] as? [String: Any] else { return nil }
+        return decodeFields(fields)
+    }
+
     /// List documents in a collection ordered by a single field.
     /// `orderBy` "createdAt DESC" → returns newest first.
     /// Set `requireAuth=false` to allow this from non-signed-in users —

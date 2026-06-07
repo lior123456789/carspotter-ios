@@ -152,7 +152,7 @@ struct ProfileView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showPlateDecoder) { PlateDecoderView() }
-            .task { await store.loadProducts(); await store.updatePurchasedTier() }
+            .task { await store.loadProducts(); await store.refreshEntitlements() }
         }
     }
 
