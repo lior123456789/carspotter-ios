@@ -16,6 +16,10 @@ const CARS: Record<string, ScanSpotProps> = {
   Ferrari: { category: 'Supercar', rarity: 8, year: '2019', make: 'Ferrari', model: '488 GTB', valueLo: 250, valueHi: 310, stats: [['661', 'HP'], ['3.0s', '0-60'], ['205', 'TOP MPH']] },
   GTR:     { category: 'JDM Icon', rarity: 7, year: '2021', make: 'Nissan', model: 'GT-R', valueLo: 110, valueHi: 140, stats: [['565', 'HP'], ['2.9s', '0-60'], ['196', 'TOP MPH']] },
   McLaren: { category: 'Supercar', rarity: 8, year: '2020', make: 'McLaren', model: '720S', valueLo: 230, valueHi: 300, stats: [['710', 'HP'], ['2.8s', '0-60'], ['212', 'TOP MPH']] },
+  Bugatti:  { category: 'Hypercar', rarity: 10, year: '2021', make: 'Bugatti', model: 'Chiron', valueLo: 3000, valueHi: 3500, stats: [['1479', 'HP'], ['2.4s', '0-60'], ['261', 'TOP MPH']] },
+  Aston:    { category: 'Grand Tourer', rarity: 7, year: '2020', make: 'Aston Martin', model: 'DB11', valueLo: 140, valueHi: 180, stats: [['528', 'HP'], ['3.7s', '0-60'], ['200', 'TOP MPH']] },
+  Corvette: { category: 'Sports Car', rarity: 6, year: '2023', make: 'Chevrolet', model: 'Corvette', valueLo: 70, valueHi: 95, stats: [['490', 'HP'], ['2.9s', '0-60'], ['194', 'TOP MPH']] },
+  Rolls:    { category: 'Ultra Luxury', rarity: 8, year: '2022', make: 'Rolls-Royce', model: 'Ghost', valueLo: 340, valueHi: 400, stats: [['563', 'HP'], ['4.6s', '0-60'], ['155', 'TOP MPH']] },
 }
 
 export const RemotionRoot: React.FC = () => {
@@ -29,6 +33,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Car2" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Ferrari} />
       <Composition id="Car3" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.GTR} />
       <Composition id="Car4" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.McLaren} />
+      <Composition id="Car5" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Bugatti} />
+      <Composition id="Car6" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Aston} />
+      <Composition id="Car7" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Corvette} />
+      <Composition id="Car8" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Rolls} />
       {/* App explainer — what it is, features, pricing */}
       <Composition id="Explainer" component={ExplainerSpot} durationInFrames={17 * FPS} fps={FPS} width={W} height={H} />
     </>
