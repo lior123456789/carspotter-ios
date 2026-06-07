@@ -31,6 +31,7 @@ struct CarSpotterApp: App {
 
 private struct RootView: View {
     @EnvironmentObject private var auth: AuthService
+    @EnvironmentObject private var store: StoreKitService
     @AppStorage("carspotter.hasSeenOnboarding") private var hasSeenOnboarding = false
     @AppStorage("carspotter.usernameSet") private var usernameSet = false
 
@@ -52,5 +53,11 @@ private struct RootView: View {
             }
         }
         .task { await auth.start() }
+        // Rebind subscription + free-scan entitlements whenever the signed-in
+        // account changes, so a tier never carries over to another account.
+        .task(id: auth.user?.uid) {
+            Entitlements.shared.setAccount(uid: auth.user?.uid)
+            await store.setAccount(uid: auth.user?.uid)
+        }
     }
 }

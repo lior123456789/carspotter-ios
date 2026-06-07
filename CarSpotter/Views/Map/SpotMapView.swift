@@ -2,16 +2,58 @@ import SwiftUI
 import MapKit
 
 struct SpotMapView: View {
+    @EnvironmentObject private var store: StoreKitService
+    @StateObject private var entitlements = Entitlements.shared
     @StateObject private var loader = SpotsLoader()
     @State private var selected: Spot?
+    @State private var showPaywall = false
     @State private var camera: MapCameraPosition = .region(MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 30, longitude: 10),
         span: MKCoordinateSpan(latitudeDelta: 60, longitudeDelta: 90)
     ))
 
+    /// Spot Map is a Collector+ feature.
+    private var unlocked: Bool {
+        entitlements.canAccessCollectorFeatures(tier: store.purchasedTier)
+    }
+
     var body: some View {
         NavigationStack {
-            ZStack {
+            if unlocked { mapBody } else { lockedBody }
+        }
+    }
+
+    private var lockedBody: some View {
+        ZStack {
+            Color.spotterInk.ignoresSafeArea()
+            VStack(spacing: 18) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 46))
+                    .foregroundStyle(LinearGradient.spotterBrand)
+                Text("Spot Map is a Collector feature")
+                    .font(.spotterTitle)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                Text("Unlock the worldwide map of where the rarest cars get spotted with Collector or Concours.")
+                    .font(.system(size: 15, design: .rounded))
+                    .foregroundStyle(Color.spotterMute)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                GradientButton(title: "Unlock Spot Map", icon: "sparkles") {
+                    showPaywall = true
+                }
+                .padding(.horizontal, 40)
+                .padding(.top, 6)
+            }
+        }
+        .navigationTitle("Spot Map")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .sheet(isPresented: $showPaywall) { PaywallView() }
+    }
+
+    private var mapBody: some View {
+        ZStack {
                 Color.spotterInk.ignoresSafeArea()
 
                 Map(position: $camera, selection: $selected) {
@@ -42,7 +84,6 @@ struct SpotMapView: View {
                     .presentationBackground(.regularMaterial)
             }
         }
-    }
 }
 
 private struct SpotPin: View {
