@@ -4,11 +4,19 @@ import FirebaseAuth
 struct ResultCardView: View {
     let car: CarInfo
     let onScanAnother: () -> Void
+    @EnvironmentObject private var store: StoreKitService
+    @StateObject private var entitlements = Entitlements.shared
     @State private var showShare = false
+    @State private var showPaywall = false
     @State private var savingToGarage = false
     @State private var savedToGarage = false
     @State private var saveError: String?
     @StateObject private var garage = FirestoreService()
+
+    /// Celebrity owners are a Collector+ perk.
+    private var canSeeCelebrity: Bool {
+        entitlements.canAccessCollectorFeatures(tier: store.purchasedTier)
+    }
 
     var body: some View {
         ScrollView {
@@ -71,24 +79,41 @@ struct ResultCardView: View {
                         }
                     }
 
-                    // ── Celebrity owner ──
-                    if let celeb = car.celebrity {
-                        HStack(spacing: 12) {
-                            Image(systemName: "trophy.fill")
-                                .foregroundStyle(.yellow)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("CELEBRITY OWNER ON RECORD")
-                                    .font(.spotterLabel)
-                                Text(celeb)
-                                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                                    .foregroundStyle(.white)
+                    // ── Celebrity owner (Collector+ only) ──
+                    if car.celebrity != nil {
+                        Button {
+                            if !canSeeCelebrity { showPaywall = true }
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: canSeeCelebrity ? "trophy.fill" : "lock.fill")
+                                    .foregroundStyle(.yellow)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("CELEBRITY OWNER ON RECORD")
+                                        .font(.spotterLabel)
+                                    if canSeeCelebrity {
+                                        Text(car.celebrity ?? "")
+                                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                            .foregroundStyle(.white)
+                                    } else {
+                                        Text("Unlock with Collector")
+                                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                            .foregroundStyle(.yellow)
+                                    }
+                                }
+                                Spacer()
+                                if !canSeeCelebrity {
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 12, weight: .bold))
+                                        .foregroundStyle(Color.spotterMute)
+                                }
                             }
-                            Spacer()
+                            .padding(14)
+                            .background(Color.yellow.opacity(0.10))
+                            .overlay(RoundedRectangle(cornerRadius: 14).stroke(.yellow.opacity(0.30), lineWidth: 1))
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
-                        .padding(14)
-                        .background(Color.yellow.opacity(0.10))
-                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.yellow.opacity(0.30), lineWidth: 1))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .buttonStyle(.plain)
+                        .disabled(canSeeCelebrity)
                     }
 
                     // ── Recent auction sale ──
@@ -193,9 +218,11 @@ struct ResultCardView: View {
         .sheet(isPresented: $showShare) {
             ComposePostView(car: car)
         }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
     }
 }
 
 #Preview {
     ResultCardView(car: .mock, onScanAnother: {})
+        .environmentObject(StoreKitService.preview)
 }
