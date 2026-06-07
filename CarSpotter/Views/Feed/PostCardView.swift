@@ -9,156 +9,109 @@ struct PostCardView: View {
     /// Block this post's author (UGC compliance).
     var onBlock: (() -> Void)? = nil
 
-    @State private var pressed = false
     @State private var showReportDialog = false
     @State private var showBlockConfirm = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // ── Header: avatar + username + time + location ──
-            HStack(spacing: 10) {
-                avatar
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("@" + post.displayName)
-                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+        HStack(alignment: .top, spacing: 12) {
+            avatar
+
+            VStack(alignment: .leading, spacing: 7) {
+                // ── username · time + menu ──
+                HStack(spacing: 5) {
+                    Text(post.displayName)
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
                         .lineLimit(1)
-                    HStack(spacing: 4) {
-                        Text(post.timeAgo)
-                            .font(.system(size: 11, design: .rounded))
-                        if let loc = post.location {
-                            Text("·")
-                            Image(systemName: "mappin.circle.fill").font(.system(size: 9))
-                            Text(loc).font(.system(size: 11, design: .rounded)).lineLimit(1)
-                        }
-                    }
-                    .foregroundStyle(Color.spotterMute)
-                }
-                Spacer()
-                Menu {
-                    if let onDelete {
-                        Button(role: .destructive) { onDelete() } label: {
-                            Label("Delete post", systemImage: "trash")
-                        }
-                    }
-                    if onReport != nil {
-                        Button { showReportDialog = true } label: {
-                            Label("Report post", systemImage: "flag")
-                        }
-                    }
-                    if onBlock != nil {
-                        Button(role: .destructive) { showBlockConfirm = true } label: {
-                            Label("Block @\(post.displayName)", systemImage: "hand.raised")
-                        }
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 14, weight: .bold))
+                    Text("· \(post.timeAgo)")
+                        .font(.system(size: 13, design: .rounded))
                         .foregroundStyle(Color.spotterMute)
-                        .padding(8)
-                }
-            }
-            .padding(12)
-
-            // ── Hero photo (no overlay — clean) ──
-            AsyncImage(url: URL(string: post.photoUrl)) { phase in
-                switch phase {
-                case .empty:
-                    Rectangle().fill(Color.spotterPanel)
-                        .overlay(ProgressView().tint(Color.spotterCyan))
-                case .success(let img):
-                    img.resizable().scaledToFill()
-                case .failure:
-                    Rectangle().fill(Color.spotterPanel)
-                        .overlay(Image(systemName: "photo.fill").foregroundStyle(Color.spotterMute))
-                @unknown default:
-                    Rectangle().fill(Color.spotterPanel)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 280)
-            .clipped()
-
-            // ── Car info row (BELOW the image, no overflow possible) ──
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 6) {
-                    BadgePill(label: post.category, color: .spotterCyan)
-                    if post.rarity >= 8 {
-                        BadgePill(label: "Rare \(post.rarity)/10",
-                                  icon: "trophy.fill", color: .yellow)
-                    }
                     Spacer(minLength: 0)
+                    menu
                 }
 
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                // ── car identity (the "post text") ──
+                HStack(alignment: .firstTextBaseline, spacing: 5) {
                     Text(post.year)
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.7))
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.55))
                     Text("\(post.make) \(post.model)")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                         .lineLimit(2)
-                        .minimumScaleFactor(0.8)
-                    Spacer(minLength: 0)
+                        .minimumScaleFactor(0.85)
                 }
-
-                Text(post.valueRange)
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundStyle(LinearGradient.spotterBrand)
-                    .lineLimit(1)
 
                 if !post.caption.isEmpty {
                     Text(post.caption)
-                        .font(.system(size: 14, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.85))
+                        .font(.system(size: 15, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.9))
                         .lineSpacing(2)
-                        .padding(.top, 4)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                // ── Like + share row ──
-                HStack(spacing: 12) {
+                if let loc = post.location {
+                    HStack(spacing: 3) {
+                        Image(systemName: "mappin.circle.fill").font(.system(size: 11))
+                        Text(loc).font(.system(size: 13, design: .rounded)).lineLimit(1)
+                    }
+                    .foregroundStyle(Color.spotterMute)
+                }
+
+                // ── media card ──
+                photo
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 300)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Color.spotterLine))
+                    .overlay(alignment: .topLeading) {
+                        HStack(spacing: 6) {
+                            BadgePill(label: post.category, color: .spotterCyan)
+                            if post.rarity >= 8 {
+                                BadgePill(label: "Rare \(post.rarity)/10", icon: "trophy.fill", color: .yellow)
+                            }
+                        }
+                        .padding(10)
+                    }
+                    .overlay(alignment: .bottomTrailing) {
+                        Text(post.valueRange)
+                            .font(.system(size: 13, weight: .heavy, design: .rounded))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 10).padding(.vertical, 6)
+                            .background(.ultraThinMaterial, in: Capsule())
+                            .padding(10)
+                    }
+                    .padding(.top, 2)
+
+                // ── action row (Threads-style: small left-aligned icons) ──
+                HStack(spacing: 22) {
                     Button {
                         let g = UIImpactFeedbackGenerator(style: .light); g.impactOccurred()
                         onLike()
                     } label: {
-                        HStack(spacing: 5) {
-                            Image(systemName: post.likedByMe ? "heart.fill" : "heart")
-                                .foregroundStyle(post.likedByMe ? .red : .white)
-                            Text("\(post.likeCount)")
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.white)
-                                .contentTransition(.numericText())
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.spotterPanel)
-                        .overlay(Capsule().stroke(Color.spotterLine))
-                        .clipShape(Capsule())
+                        actionIcon(post.likedByMe ? "heart.fill" : "heart",
+                                   count: post.likeCount,
+                                   tint: post.likedByMe ? .red : .white)
                     }
-                    Spacer()
+                    .buttonStyle(.plain)
+
                     ShareLink(
                         item: URL(string: post.photoUrl) ?? URL(string: "https://carsspotter.com")!,
                         subject: Text("\(post.year) \(post.make) \(post.model)")
                     ) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "square.and.arrow.up")
-                            Text("Share").font(.system(size: 13, weight: .semibold, design: .rounded))
-                        }
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.spotterPanel)
-                        .overlay(Capsule().stroke(Color.spotterLine))
-                        .clipShape(Capsule())
+                        actionIcon("paperplane", count: nil, tint: .white)
                     }
+                    Spacer(minLength: 0)
                 }
-                .padding(.top, 4)
+                .padding(.top, 3)
             }
-            .padding(12)
         }
-        .background(Color.spotterPanel.opacity(0.5))
-        .overlay(RoundedRectangle(cornerRadius: 22).stroke(Color.spotterLine))
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Color.spotterLine).frame(height: 0.5)
+        }
         .confirmationDialog("Report this post?",
                             isPresented: $showReportDialog,
                             titleVisibility: .visible) {
@@ -169,13 +122,71 @@ struct PostCardView: View {
         } message: {
             Text("Our team reviews reports within 24 hours and removes content that violates our guidelines. You won't see this post again.")
         }
-        .confirmationDialog("Block @\(post.displayName)?",
+        .confirmationDialog("Block \(post.displayName)?",
                             isPresented: $showBlockConfirm,
                             titleVisibility: .visible) {
             Button("Block", role: .destructive) { onBlock?() }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("You won't see posts from @\(post.displayName) anymore.")
+            Text("You won't see posts from \(post.displayName) anymore.")
+        }
+    }
+
+    // MARK: - Pieces
+
+    private func actionIcon(_ system: String, count: Int?, tint: Color) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: system)
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(tint)
+            if let count, count > 0 {
+                Text("\(count)")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .contentTransition(.numericText())
+            }
+        }
+    }
+
+    @ViewBuilder private var menu: some View {
+        Menu {
+            if let onDelete {
+                Button(role: .destructive) { onDelete() } label: {
+                    Label("Delete post", systemImage: "trash")
+                }
+            }
+            if onReport != nil {
+                Button { showReportDialog = true } label: {
+                    Label("Report post", systemImage: "flag")
+                }
+            }
+            if onBlock != nil {
+                Button(role: .destructive) { showBlockConfirm = true } label: {
+                    Label("Block \(post.displayName)", systemImage: "hand.raised")
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(Color.spotterMute)
+                .padding(.leading, 8)
+        }
+    }
+
+    @ViewBuilder private var photo: some View {
+        AsyncImage(url: URL(string: post.photoUrl)) { phase in
+            switch phase {
+            case .empty:
+                Rectangle().fill(Color.spotterPanel)
+                    .overlay(ProgressView().tint(Color.spotterCyan))
+            case .success(let img):
+                img.resizable().scaledToFill()
+            case .failure:
+                Rectangle().fill(Color.spotterPanel)
+                    .overlay(Image(systemName: "photo.fill").foregroundStyle(Color.spotterMute))
+            @unknown default:
+                Rectangle().fill(Color.spotterPanel)
+            }
         }
     }
 
@@ -186,16 +197,16 @@ struct PostCardView: View {
             } placeholder: {
                 LinearGradient.spotterBrand
             }
-            .frame(width: 36, height: 36)
+            .frame(width: 40, height: 40)
             .clipShape(Circle())
         } else {
             ZStack {
                 LinearGradient.spotterBrand
                 Text(post.displayName.prefix(1).uppercased())
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
             }
-            .frame(width: 36, height: 36)
+            .frame(width: 40, height: 40)
             .clipShape(Circle())
         }
     }

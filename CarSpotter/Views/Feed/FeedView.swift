@@ -15,7 +15,7 @@ struct FeedView: View {
                     emptyState
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: 14) {
+                        LazyVStack(spacing: 0) {
                             ForEach(feed.posts) { post in
                                 let isMine = post.userId == (Auth.auth().currentUser?.uid ?? "")
                                 PostCardView(post: post,
@@ -30,9 +30,8 @@ struct FeedView: View {
                                     .transition(.opacity)
                             }
                         }
-                        .padding(.horizontal, 14)
-                        .padding(.top, 10)
-                        .padding(.bottom, 30)
+                        .padding(.top, 4)
+                        .padding(.bottom, 100)
                         .animation(.easeOut, value: feed.posts.count)
                     }
                 }
