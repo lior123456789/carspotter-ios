@@ -14,6 +14,7 @@ enum API {
         case me = "/api/me"
         case authSync = "/api/auth/sync"
         case plateDecode = "/api/plate-decode"
+        case ask = "/api/ask"
     }
 
     static func url(_ endpoint: Endpoint) -> URL {

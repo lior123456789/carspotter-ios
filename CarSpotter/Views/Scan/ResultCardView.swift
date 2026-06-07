@@ -8,6 +8,7 @@ struct ResultCardView: View {
     @StateObject private var entitlements = Entitlements.shared
     @State private var showShare = false
     @State private var showPaywall = false
+    @State private var showAskAI = false
     @State private var savingToGarage = false
     @State private var savedToGarage = false
     @State private var saveError: String?
@@ -116,6 +117,34 @@ struct ResultCardView: View {
                         .disabled(canSeeCelebrity)
                     }
 
+                    // ── Ask the AI (Collector+ only) ──
+                    Button {
+                        if canSeeCelebrity { showAskAI = true } else { showPaywall = true }
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: canSeeCelebrity ? "sparkles" : "lock.fill")
+                                .foregroundStyle(LinearGradient.spotterBrand)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("ASK CARSPOTTER AI")
+                                    .font(.spotterLabel)
+                                Text(canSeeCelebrity
+                                     ? "Questions about this \(car.model)? Just ask."
+                                     : "Unlock with Collector")
+                                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(canSeeCelebrity ? .white : Color.spotterCyan)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundStyle(Color.spotterMute)
+                        }
+                        .padding(14)
+                        .background(Color.spotterPanel)
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.spotterLine))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                    .buttonStyle(.plain)
+
                     // ── Recent auction sale ──
                     if let sale = car.recentSale {
                         VStack(alignment: .leading, spacing: 8) {
@@ -219,6 +248,7 @@ struct ResultCardView: View {
             ComposePostView(car: car)
         }
         .sheet(isPresented: $showPaywall) { PaywallView() }
+        .sheet(isPresented: $showAskAI) { AskAIView(car: car) }
     }
 }
 

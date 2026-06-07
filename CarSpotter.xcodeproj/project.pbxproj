@@ -36,6 +36,7 @@
 		B6F90BC0F7F91AF8479D1398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FF3C47AAA3C0FE6B7505EF /* ContentView.swift */; };
 		B85219E6A1C0A6E4AD0754CD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A58E6F2340664AEE5902E1 /* PaywallView.swift */; };
 		C1D2E3F4A5B60718293A4B5C /* PlateDecoderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D2E3F4A5B60718293A4B5D /* PlateDecoderView.swift */; };
+		D2E3F4A5B6C70819203A4B6C /* AskAIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E3F4A5B6C70819203A4B6D /* AskAIView.swift */; };
 		BC70CAE5285898B97847C2A9 /* IdentifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B843E3A239CF72DF2BFF1FC /* IdentifyService.swift */; };
 		BEF0FFFBB4060C8E983C2D6D /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5F98713970AA4769C4F994 /* FeedService.swift */; };
 		A1B2C3D4E5F600112233A001 /* ModerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600112233F001 /* ModerationService.swift */; };
@@ -81,6 +82,7 @@
 		B5FF3C47AAA3C0FE6B7505EF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B6A58E6F2340664AEE5902E1 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		C1D2E3F4A5B60718293A4B5D /* PlateDecoderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateDecoderView.swift; sourceTree = "<group>"; };
+		D2E3F4A5B6C70819203A4B6D /* AskAIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskAIView.swift; sourceTree = "<group>"; };
 		B9FED735F432159A520FC601 /* PostCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCardView.swift; sourceTree = "<group>"; };
 		BF43DC095B6EA819C654BCB4 /* FirebaseREST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseREST.swift; sourceTree = "<group>"; };
 		C54223063F0CB14556469CE1 /* ResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardView.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				B6A58E6F2340664AEE5902E1 /* PaywallView.swift */,
 				C1D2E3F4A5B60718293A4B5D /* PlateDecoderView.swift */,
+				D2E3F4A5B6C70819203A4B6D /* AskAIView.swift */,
 				1EFEB3C9FD8806C948B36E4D /* ProfileView.swift */,
 				F34AF78F2F3AD63E6FC22A60 /* SignInView.swift */,
 				65DD7D7A9F347740A39039A7 /* UsernameSetupView.swift */,
@@ -353,6 +356,7 @@
 				061F49086C978FBD587F40EA /* OnboardingView.swift in Sources */,
 				B85219E6A1C0A6E4AD0754CD /* PaywallView.swift in Sources */,
 				C1D2E3F4A5B60718293A4B5C /* PlateDecoderView.swift in Sources */,
+				D2E3F4A5B6C70819203A4B6C /* AskAIView.swift in Sources */,
 				D6EC1B0CD4BD5E03DD3A3B63 /* PostCardView.swift in Sources */,
 				5A6E91F14BA97BEB73F8ABEE /* ProfileView.swift in Sources */,
 				6E269D5EC639926D75509AE5 /* ResultCardView.swift in Sources */,
