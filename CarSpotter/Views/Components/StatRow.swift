@@ -7,41 +7,57 @@ struct StatRow: View {
     var bar: Double? = nil   // 0-1 fills a thin progress line
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(label.uppercased())
                 .font(.system(size: 10, weight: .heavy, design: .rounded))
-                .tracking(2)
+                .tracking(1.8)
                 .foregroundStyle(Color.spotterMute)
 
-            Text(value)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundStyle(accent ? Color.spotterCyan : .white)
+            Group {
+                if accent {
+                    Text(value)
+                        .foregroundStyle(LinearGradient.spotterBrand)
+                } else {
+                    Text(value)
+                        .foregroundStyle(.white)
+                }
+            }
+            .font(.system(size: 19, weight: .bold, design: .rounded))
+            .minimumScaleFactor(0.7)
+            .lineLimit(2)
 
             if let bar {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(.white.opacity(0.08))
-                            .frame(height: 4)
-                        RoundedRectangle(cornerRadius: 2)
+                        Capsule().fill(.white.opacity(0.08)).frame(height: 5)
+                        Capsule()
                             .fill(LinearGradient.spotterBrand)
-                            .frame(width: geo.size.width * max(0, min(1, bar)), height: 4)
+                            .frame(width: geo.size.width * max(0, min(1, bar)), height: 5)
+                            .shadow(color: Color.spotterCyan.opacity(0.5), radius: 4)
                     }
                 }
-                .frame(height: 4)
-                .padding(.top, 2)
+                .frame(height: 5)
+                .padding(.top, 3)
             }
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(accent ? Color.spotterCyan.opacity(0.07) : Color.spotterPanel)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: accent
+                            ? [Color.spotterCyan.opacity(0.12), Color.spotterViolet.opacity(0.06)]
+                            : [Color.white.opacity(0.05), Color.white.opacity(0.02)],
+                        startPoint: .topLeading, endPoint: .bottomTrailing
+                    )
+                )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(accent ? Color.spotterCyan.opacity(0.3) : Color.spotterLine, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(accent ? Color.spotterCyan.opacity(0.35) : Color.spotterLine, lineWidth: 1)
         )
+        .shadow(color: accent ? Color.spotterCyan.opacity(0.15) : .clear, radius: 10, y: 4)
     }
 }
 
