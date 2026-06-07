@@ -4,7 +4,9 @@ import FirebaseAuth
 struct ProfileView: View {
     @EnvironmentObject private var auth: AuthService
     @EnvironmentObject private var store: StoreKitService
+    @StateObject private var entitlements = Entitlements.shared
     @State private var showPaywall = false
+    @State private var showPlateDecoder = false
 
     var body: some View {
         NavigationStack {
@@ -73,6 +75,32 @@ struct ProfileView: View {
                         .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.spotterLine))
                         .clipShape(RoundedRectangle(cornerRadius: 20))
 
+                        // ── Pro tools (Concours) ──
+                        VStack(alignment: .leading, spacing: 0) {
+                            HStack {
+                                Text("PRO TOOLS").font(.spotterLabel)
+                                Spacer()
+                                if !entitlements.canAccessProTools(tier: store.purchasedTier) {
+                                    Text("CONCOURS").font(.system(size: 10, weight: .bold, design: .rounded))
+                                        .foregroundStyle(Color.spotterViolet)
+                                }
+                            }
+                            .padding(.horizontal, 18).padding(.top, 14).padding(.bottom, 6)
+
+                            settingsRow("License plate decoder",
+                                        icon: entitlements.canAccessProTools(tier: store.purchasedTier)
+                                            ? "textformat.123" : "lock.fill") {
+                                if entitlements.canAccessProTools(tier: store.purchasedTier) {
+                                    showPlateDecoder = true
+                                } else {
+                                    showPaywall = true
+                                }
+                            }
+                        }
+                        .background(Color.spotterPanel)
+                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.spotterLine))
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+
                         // ── Settings list ──
                         VStack(spacing: 0) {
                             settingsRow("Restore purchases", icon: "arrow.clockwise.circle.fill") {
@@ -123,6 +151,7 @@ struct ProfileView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showPaywall) { PaywallView() }
+            .sheet(isPresented: $showPlateDecoder) { PlateDecoderView() }
             .task { await store.loadProducts(); await store.updatePurchasedTier() }
         }
     }
