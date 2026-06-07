@@ -51,19 +51,21 @@ final class FirestoreService: ObservableObject {
         isLoadingScans = true
         defer { isLoadingScans = false }
         do {
+            // No server-side orderBy on purpose: pairing a `where userId ==`
+            // filter with `orderBy spottedAt` needs a (userId, spottedAt)
+            // composite index — if that index is missing the query throws and
+            // the garage looks permanently empty. We sort newest-first below.
             let docs = try await FirestoreREST.queryDocs(
                 collection: "scans",
                 whereField: "userId",
                 equalToString: userId,
-                orderByField: "spottedAt",
-                descending: true,
                 limit: 100
             )
-            myScans = docs.compactMap { doc in
+            myScans = docs.compactMap { doc -> (car: CarInfo, at: Date)? in
                 let d = doc.data
                 guard let make = d["make"] as? String,
                       let model = d["model"] as? String else { return nil }
-                return CarInfo(
+                let car = CarInfo(
                     make: make,
                     model: model,
                     year: d["year"] as? String ?? "",
@@ -88,7 +90,10 @@ final class FirestoreService: ObservableObject {
                     recalls: nil,
                     wiki: (d["wiki"] as? String).flatMap { $0.isEmpty ? nil : $0 }
                 )
+                return (car, (d["spottedAt"] as? Date) ?? .distantPast)
             }
+            .sorted { $0.at > $1.at }   // newest first, client-side
+            .map(\.car)
         } catch {
             lastError = error.localizedDescription
             print("[FirestoreService] loadMyScans error: \(error)")
