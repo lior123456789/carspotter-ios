@@ -1,4 +1,4 @@
-import { AbsoluteFill, Audio, Sequence, staticFile, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
+import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
 import { fadeInOut, slideUp, scaleIn, typedChars, progress } from './lib/anim'
 import { Bg, Wordmark, Chip, PANEL, LINE, CYAN, VIOLET, MUTE, BRAND_GRAD } from './lib/brand'
 
@@ -138,7 +138,6 @@ function CTA() {
 
 export const Spot1: React.FC = () => (
   <AbsoluteFill>
-    <Audio src={staticFile('audio/vo1.m4a')} />
     <Bg />
     <Sequence from={0}><Hook /></Sequence>
     <Sequence from={0}><Scan /></Sequence>
