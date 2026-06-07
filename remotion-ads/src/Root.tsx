@@ -4,6 +4,7 @@ import { Spot1 } from './Spot1'
 import { Spot2 } from './Spot2'
 import { Spot3 } from './Spot3'
 import { ScanSpot, type ScanSpotProps } from './ScanSpot'
+import { ExplainerSpot } from './ExplainerSpot'
 
 // Vertical 9:16 for TikTok / Reels / Shorts.
 const W = 1080
@@ -28,6 +29,8 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Car2" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.Ferrari} />
       <Composition id="Car3" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.GTR} />
       <Composition id="Car4" component={ScanSpot} durationInFrames={13 * FPS} fps={FPS} width={W} height={H} defaultProps={CARS.McLaren} />
+      {/* App explainer — what it is, features, pricing */}
+      <Composition id="Explainer" component={ExplainerSpot} durationInFrames={17 * FPS} fps={FPS} width={W} height={H} />
     </>
   )
 }
