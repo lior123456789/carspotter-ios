@@ -44,9 +44,9 @@ private struct RootView: View {
                 }
             } else if !hasSeenOnboarding {
                 OnboardingView(onDone: { hasSeenOnboarding = true })
-            } else if auth.user == nil {
+            } else if auth.user == nil && !auth.isGuest {
                 SignInView()
-            } else if !usernameSet && (auth.user?.displayName ?? "").isEmpty {
+            } else if !auth.isGuest && !usernameSet && (auth.user?.displayName ?? "").isEmpty {
                 UsernameSetupView(onDone: { usernameSet = true })
             } else {
                 ContentView()

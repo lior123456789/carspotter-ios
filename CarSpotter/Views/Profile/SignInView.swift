@@ -106,7 +106,7 @@ struct SignInView: View {
                     GradientButton(title: "Continue as guest",
                                    icon: "person.fill.questionmark",
                                    style: .ghost) {
-                        Task { await auth.signInAnonymously() }
+                        Task { await auth.continueAsGuest() }
                     }
                     .padding(.top, 6)
                 }

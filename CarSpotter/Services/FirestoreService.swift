@@ -11,6 +11,19 @@ final class FirestoreService: ObservableObject {
     @Published var isLoadingScans = false
     @Published var lastError: String?
 
+    /// Delete every scan belonging to a user — used by account deletion
+    /// (App Store guideline 5.1.1(v)). Best-effort: failures are ignored.
+    static func deleteAllData(for userId: String) async {
+        do {
+            let docs = try await FirestoreREST.queryDocs(
+                collection: "scans", whereField: "userId", equalToString: userId, limit: 300
+            )
+            for doc in docs {
+                try? await FirestoreREST.deleteDoc(path: "scans/\(doc.id)")
+            }
+        } catch { /* best-effort cleanup */ }
+    }
+
     /// Persist a scan to the user's Firestore /scans collection.
     /// Called from "Save to Garage" on the result card.
     func saveScan(_ car: CarInfo, userId: String) async throws {

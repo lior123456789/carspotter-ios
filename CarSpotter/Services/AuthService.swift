@@ -6,7 +6,12 @@ final class AuthService: NSObject, ObservableObject {
     @Published var user: User? = nil
     @Published var isLoading: Bool = true
     @Published var lastError: String?
+    /// Local guest session — lets users into the app without a Firebase
+    /// account even when Anonymous auth is unavailable. Persisted so it
+    /// survives relaunch.
+    @Published var isGuest = false
 
+    private let guestKey = "carspotter.isGuest"
     private var handle: AuthStateDidChangeListenerHandle?
 
     static var preview: AuthService {
@@ -16,9 +21,12 @@ final class AuthService: NSObject, ObservableObject {
     }
 
     func start() async {
+        isGuest = UserDefaults.standard.bool(forKey: guestKey)
         handle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             Task { @MainActor in
                 self?.user = user
+                // A real account supersedes a local guest session.
+                if user != nil { self?.isGuest = false; UserDefaults.standard.set(false, forKey: self?.guestKey ?? "carspotter.isGuest") }
                 self?.isLoading = false
                 if let user { await self?.syncCookie(uid: user.uid, email: user.email) }
             }
@@ -46,18 +54,45 @@ final class AuthService: NSObject, ObservableObject {
         }
     }
 
-    // ── Anonymous guest mode ─────────────────────────────────────────────
+    // ── Guest mode ───────────────────────────────────────────────────────
+    // Tries Firebase Anonymous auth; if that's disabled or fails for any
+    // reason, falls back to a purely local guest session so "Continue as
+    // guest" ALWAYS works and never shows an error.
 
-    func signInAnonymously() async {
+    func continueAsGuest() async {
         do {
             try await Auth.auth().signInAnonymously()
         } catch {
-            lastError = error.localizedDescription
+            isGuest = true
+            UserDefaults.standard.set(true, forKey: guestKey)
+            isLoading = false
         }
     }
 
     func signOut() {
         try? Auth.auth().signOut()
+        isGuest = false
+        UserDefaults.standard.set(false, forKey: guestKey)
+    }
+
+    /// Permanently delete the signed-in account (App Store guideline 5.1.1(v)).
+    /// Returns an error message on failure, or nil on success.
+    func deleteAccount() async -> String? {
+        guard let current = Auth.auth().currentUser else {
+            isGuest = false
+            UserDefaults.standard.set(false, forKey: guestKey)
+            return nil
+        }
+        // Best-effort: remove the user's stored scans before deleting the account.
+        await FirestoreService.deleteAllData(for: current.uid)
+        do {
+            try await current.delete()
+            isGuest = false
+            UserDefaults.standard.set(false, forKey: guestKey)
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
     }
 
     // ── Cookie sync (mirrors web behavior) ───────────────────────────────

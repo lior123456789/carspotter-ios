@@ -7,6 +7,8 @@ struct ProfileView: View {
     @StateObject private var entitlements = Entitlements.shared
     @State private var showPaywall = false
     @State private var showPlateDecoder = false
+    @State private var showDeleteConfirm = false
+    @State private var deleting = false
 
     var body: some View {
         NavigationStack {
@@ -139,6 +141,20 @@ struct ProfileView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                         }
 
+                        // ── Delete account (App Store 5.1.1(v)) ──
+                        if auth.user != nil {
+                            Button(role: .destructive) {
+                                showDeleteConfirm = true
+                            } label: {
+                                Text(deleting ? "Deleting…" : "Delete account")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.red.opacity(0.85))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                            }
+                            .disabled(deleting)
+                        }
+
                         Text("CarSpotter v1.0.0")
                             .font(.system(size: 11, design: .rounded))
                             .foregroundStyle(Color.spotterMute)
@@ -152,6 +168,20 @@ struct ProfileView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showPlateDecoder) { PlateDecoderView() }
+            .confirmationDialog("Delete your account?",
+                                isPresented: $showDeleteConfirm,
+                                titleVisibility: .visible) {
+                Button("Delete account", role: .destructive) {
+                    Task {
+                        deleting = true
+                        _ = await auth.deleteAccount()
+                        deleting = false
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This permanently deletes your account and your saved garage. This can't be undone.")
+            }
             .task { await store.loadProducts(); await store.refreshEntitlements() }
         }
     }
